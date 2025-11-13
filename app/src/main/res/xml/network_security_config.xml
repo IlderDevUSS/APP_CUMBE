@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!--
+      Esta es la configuración de seguridad.
+      Le decimos a Android que permita el tráfico HTTP (cleartextTrafficPermitted="true")
+      SOLAMENTE al dominio de nuestro backend.
+    -->
+    <domain-config cleartextTrafficPermitted="true">
+        <!--
+          ¡IMPORTANTE!
+          Esta es la URL base de tu backend (la que funciona en Postman).
+          Asegúrate de que sea tu dominio de PythonAnywhere (sin http://).
+          Estoy usando la URL 'byRedli.pythonanywhere.com'
+          basado en el archivo app_cumbe_backend.py (file: app_cumbe_backend.py).
+        -->
+        <domain includeSubdomains="true">byRedli.pythonanywhere.com</domain>
+    </domain-config>
+</network-security-config>

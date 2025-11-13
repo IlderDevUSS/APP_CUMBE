@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="60dp">
+
+    <View
+        android:id="@+id/viewTimelineLine"
+        android:layout_width="2dp"
+        android:layout_height="0dp"
+        android:background="@color/color_timeline_pending"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/ivTimelineIcon"
+        app:layout_constraintStart_toStartOf="@id/ivTimelineIcon"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivTimelineIcon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/bg_timeline_icon_pending"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvTimelineStepTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ivTimelineIcon"
+        app:layout_constraintTop_toTopOf="@id/ivTimelineIcon"
+        app:layout_constraintBottom_toTopOf="@id/tvTimelineStepDate"
+        tools:text="[Título del Paso]" />
+
+    <TextView
+        android:id="@+id/tvTimelineStepDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tvTimelineStepTitle"
+        app:layout_constraintTop_toBottomOf="@id/tvTimelineStepTitle"
+        tools:text="[Fecha y Hora] | [Ubicación]" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
