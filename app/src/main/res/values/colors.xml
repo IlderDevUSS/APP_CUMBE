@@ -5,11 +5,26 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
+    <color name="black">#2E2E2E</color>
+    <color name="gris1">#4A4A4A</color>
+    <color name="gris2">#DBDBDB</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="color_principal_cumbe">#ec7656</color>
+    <color name="color_principal_cumbe">#FF6D29</color>
     <color name="color_estado_entregado">#4CAF50</color>
+    <color name="color_estado_en_destino">#FF9800</color>
     <color name="color_estado_encamino">#FFC107</color>
     <color name="color_estado_recibido">#0277BD</color> <color name="color_timeline_pending">#CCCCCC</color>
-    <color name="color_gris_tarjeta">#F5F5F5</color>
+    <color name="color_gris_tarjeta">#9B9898</color>
+
+    <!-- NUEVOS COLORES PARA EL DISEÑO MODERNO -->
+    <color name="color_surface_bg">#F8F9FA</color>
+    <color name="color_text_primary">#1F2937</color>
+    <color name="color_text_secondary">#6B7280</color>
+    <color name="color_accent_bg_light">#FFF7ED</color>
+    <color name="color_divider">#E5E7EB</color>
+
+    <!-- Gradiente moderno -->
+    <color name="gradient_start">#ec7656</color>
+    <color name="gradient_end">#FF8A65</color>
+
 </resources>

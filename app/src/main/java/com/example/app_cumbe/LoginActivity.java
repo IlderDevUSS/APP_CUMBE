@@ -31,13 +31,13 @@ public class LoginActivity extends AppCompatActivity {
         // --- CAMBIO 1: VERIFICAR SESIÓN PRIMERO ---
         // Antes de inflar la vista, revisamos si ya hay un token guardado.
         if (verificarSesion()) {
-            // Si hay token, saltamos directo al Home y "matamos" esta actividad
-            navegarAlHome(null); // Pasamos null porque el nombre lo leerá el Home desde SharedPreferences
-            finish(); // Cierra LoginActivity
-            return; // Detiene la ejecución de onCreate aquí
+
+            navegarAlHome(null);
+            finish();
+            return;
         }
 
-        // Si no hay sesión, continuamos e inflamos la vista de Login
+
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -50,9 +50,11 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Ocultamos el botón de prueba
-        if (binding.btnTestTracking != null) {
-            binding.btnTestTracking.setVisibility(View.GONE);
+        if (binding.btnVerServicios != null) {
+            binding.btnVerServicios.setOnClickListener(v -> {
+                Intent intent = new Intent(LoginActivity.this, ServiciosActivity.class);
+                startActivity(intent);
+            });
         }
     }
 
@@ -149,6 +151,11 @@ public class LoginActivity extends AppCompatActivity {
         editor.putString("USER_NAME", response.getNombre());
         editor.putString("USER_DNI", response.getDni());
         editor.putString("USER_EMAIL", response.getEmail());
+
+        // --- AÑADIR ESTAS DOS LÍNEAS ---
+        editor.putString("USER_PHONE", response.getTelefono());
+        editor.putString("USER_BIRTH_DATE", response.getFecha_nacimiento());
+
         editor.apply();
     }
 

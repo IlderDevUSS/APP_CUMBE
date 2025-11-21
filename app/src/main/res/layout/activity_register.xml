@@ -10,6 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:padding="24dp">
 
         <ImageButton
@@ -24,13 +25,26 @@
 
         <ImageView
             android:id="@+id/imgLogoReg"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_marginTop="32dp"
             android:src="@drawable/logocumbe"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvfraseEslogan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Somos tu gente, somo tu agencia"
+            android:textSize="21sp"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:textColor="@color/color_principal_cumbe"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imgLogoReg" />
 
         <TextView
             android:id="@+id/tvTituloRegistro"
@@ -42,7 +56,7 @@
             android:textSize="28sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imgLogoReg" />
+            app:layout_constraintTop_toBottomOf="@+id/tvfraseEslogan" />
 
         <!-- Nombres -->
         <TextView
@@ -50,6 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
+            android:textColor="@color/gris1"
             android:text="Nombres"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvTituloRegistro" />
@@ -58,6 +73,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="Ingresa tus nombres"
+            style="@style/EstiloInputCumbe"
             android:inputType="textPersonName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -69,6 +85,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:textColor="@color/gris1"
             android:text="Apellidos"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etNombres" />
@@ -77,6 +94,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="Ingresa tus apellidos"
+            style="@style/EstiloInputCumbe"
             android:inputType="textPersonName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -88,6 +106,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:textColor="@color/gris1"
             android:text="DNI"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etApellidos" />
@@ -97,14 +116,11 @@
             android:layout_height="wrap_content"
             android:hint="Ingresa tu DNI"
             android:inputType="number"
+            style="@style/EstiloInputCumbe"
             android:maxLength="8"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvLabelDni" />
-
-        <!--
-          CAMPO DE USUARIO ELIMINADO
-        -->
 
         <!-- Email -->
         <TextView
@@ -112,6 +128,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:textColor="@color/gris1"
             android:text="Email"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etDni" /> <!-- Constreñido a DNI -->
@@ -120,6 +137,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="ejemplo@correo.com"
+            style="@style/EstiloInputCumbe"
             android:inputType="textEmailAddress"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -131,6 +149,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:textColor="@color/gris1"
             android:text="Teléfono"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etEmail" />
@@ -139,6 +158,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="987654321"
+            style="@style/EstiloInputCumbe"
             android:inputType="phone"
             android:maxLength="9"
             app:layout_constraintEnd_toEndOf="parent"
@@ -151,6 +171,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:textColor="@color/gris1"
             android:text="Fecha de Nacimiento"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etTelefono" />
@@ -161,6 +182,7 @@
             android:hint="DD/MM/AAAA"
             android:inputType="date"
             android:focusable="false"
+            style="@style/EstiloInputCumbe"
             android:clickable="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -172,6 +194,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:textColor="@color/gris1"
             android:text="Contraseña"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etFechaNac" />
@@ -180,6 +203,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="Crea una contraseña segura"
+            style="@style/EstiloInputCumbe"
             android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -191,6 +215,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:textColor="@color/gris1"
             android:text="Confirmar Contraseña"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etPasswordReg" />
@@ -198,6 +223,7 @@
             android:id="@+id/etPasswordConfirm"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            style="@style/EstiloInputCumbe"
             android:hint="Vuelve a escribir la contraseña"
             android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="parent"

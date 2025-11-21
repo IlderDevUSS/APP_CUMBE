@@ -5,46 +5,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".TrackingActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbarTracking"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/color_principal_cumbe"
+        android:background="@color/color_divider"
         app:title="Mis Encomiendas"
-        app:titleTextColor="@color/white"
+        app:titleTextColor="@color/color_text_primary"
         app:navigationIcon="@drawable/ic_arrow_back"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navigationIconTint="@color/white" />
+        app:navigationIconTint="@color/color_text_primary"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/tvWelcomeUser"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
         android:textColor="@color/black"
+        android:maxLines="1"
+        android:ellipsize="end"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbarTracking"
-        tools:text="Bienvenid@, [Nombre Usuario]" />
+        tools:text="Bienvenid@, [Nombre del usuario]" />
 
     <TextView
         android:id="@+id/tvUserDni"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/gris1"
+        android:layout_marginTop="15dp"
         android:layout_marginStart="16dp"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvWelcomeUser"
-        tools:text="Tus encomiendas registradas con el DNI [DNI Usuario]" />
+        tools:text="En este apartado puedes visualizar todas las encomiendas enviadas o por recibir con el DNI [DNI Usuario]" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/color_surface_bg"
         app:layout_constraintTop_toBottomOf="@id/tvUserDni"
         app:tabIndicatorColor="@color/color_principal_cumbe"
         app:tabSelectedTextColor="@color/color_principal_cumbe"

@@ -3,40 +3,58 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/DashboardNavCard"
-    tools:layout_height="wrap_content"
-    tools:layout_width="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="0dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="#F0F0F0"
+    app:cardBackgroundColor="@color/white">
+    <!-- cardElevation 0 + stroke = look moderno y plano -->
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="177dp"
+        android:background="@color/gris2"
+        android:gravity="start"
         android:orientation="vertical"
-        android:padding="16dp"
-        android:minHeight="120dp">
+        android:padding="16dp">
 
-        <ImageView
-            android:id="@+id/ivCardIcon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginBottom="8dp"
-            tools:src="@drawable/ic_local_activity"
-            app:tint="@color/color_principal_cumbe" />
+        <!-- Icono con fondo circular -->
+        <FrameLayout
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_circle_accent">
+
+            <ImageView
+                android:id="@+id/ivCardIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                app:tint="@color/color_principal_cumbe"
+                tools:src="@drawable/ic_local_activity" />
+        </FrameLayout>
 
         <TextView
             android:id="@+id/tvCardTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+            android:layout_marginBottom="4dp"
+            android:textColor="@color/color_text_primary"
+            android:textSize="15sp"
             android:textStyle="bold"
-            android:textColor="@color/black"
-            tools:text="Título de la Tarjeta" />
+            tools:text="Comprar Pasaje" />
 
         <TextView
             android:id="@+id/tvCardDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/color_text_secondary"
             android:textSize="12sp"
-            tools:text="Descripción corta de la tarjeta." />
+            tools:text="Reserva tu asiento" />
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

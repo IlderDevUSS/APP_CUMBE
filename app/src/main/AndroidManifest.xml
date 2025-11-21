@@ -30,11 +30,7 @@
             android:name=".HomeActivity"
             android:exported="false" />
 
-        <!--
-          CAMBIO 2:
-          LoginActivity es AHORA la actividad de inicio (LAUNCHER).
-          Le movemos el intent-filter aquí y ponemos exported="true".
-        -->
+
         <activity
             android:name=".LoginActivity"
             android:exported="true">
@@ -45,11 +41,20 @@
         </activity>
 
         <activity
+            android:name=".ServiciosActivity"
+            android:exported="false"
+            android:theme="@style/Theme.APP_Cumbe.NoActionBar" />
+
+        <activity
             android:name=".RegisterActivity"
             android:exported="false" />
 
         <activity
             android:name=".TrackingActivity"
+            android:exported="false"
+            android:theme="@style/Theme.APP_Cumbe.NoActionBar" />
+        <activity
+            android:name=".ProfileActivity"
             android:exported="false"
             android:theme="@style/Theme.APP_Cumbe.NoActionBar" />
 

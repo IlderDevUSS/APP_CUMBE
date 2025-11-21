@@ -16,6 +16,7 @@
     <style name="DetailRowText">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/gris1</item>
         <item name="android:textSize">14sp</item>
         <item name="android:layout_marginBottom">4dp</item>
     </style>
@@ -26,12 +27,33 @@
     </style>
     <style name="DashboardNavCard" parent="Widget.MaterialComponents.CardView">
         <item name="android:layout_width">0dp</item>
-
         <item name="android:layout_height">0dp</item>
-
-        <item name="android:layout_margin">8dp</item>
-        <item name="cardCornerRadius">10dp</item>
+        <item name="android:layout_margin">12dp</item> <item name="cardCornerRadius">10dp</item>
         <item name="cardElevation">4dp</item>
-        <item name="layout_columnWeight">1</item> <item name="layout_rowWeight">1</item> <item name="layout_gravity">fill</item>
+        <item name="layout_columnWeight">1</item>
+        <item name="layout_rowWeight">1</item>
+        <item name="layout_gravity">fill</item>
+
     </style>
+
+    -->
+    <style name="EstiloInputCumbe" parent="Widget.AppCompat.EditText">
+        <!--
+          Fondo Personalizado:
+          Usa el archivo 'bg_input_cumbe.xml' que creamos en 'res/drawable'.
+          Este archivo dibuja el rectángulo gris y la línea de color inferior.
+        -->
+        <item name="android:background">@drawable/bg_input_cumbe</item>
+
+        <!-- Padding interno: Espacio entre el texto y los bordes del campo -->
+        <item name="android:padding">12dp</item>
+
+        <!-- Tamaño y color del texto que escribe el usuario -->
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/black</item>
+
+        <!-- Margen inferior automático para separar los inputs entre sí -->
+        <item name="android:layout_marginBottom">16dp</item>
+    </style>
+
 </resources>

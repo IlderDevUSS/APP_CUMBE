@@ -7,14 +7,23 @@ import androidx.core.content.ContextCompat;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.app_cumbe.api.ApiClient;
+import com.example.app_cumbe.api.ApiService;
 import com.example.app_cumbe.databinding.ActivityHomeBinding;
+import com.example.app_cumbe.model.ResponseProximoViaje;
+
 
 import static com.example.app_cumbe.LoginActivity.SP_NAME;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -26,40 +35,22 @@ public class HomeActivity extends AppCompatActivity {
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         loadData();
+        cargarProximoViaje();
         setupListeners();
     }
 
     private void loadData() {
-        // --- CAMBIO: LÓGICA DE SALUDO MEJORADA ---
+
         String userName = getIntent().getStringExtra("USER_NAME");
 
         if (userName == null || userName.isEmpty()) {
-            // Si el Intent no trae el nombre (porque venimos de verificarSesion),
-            // lo leemos desde SharedPreferences
+
             SharedPreferences prefs = getSharedPreferences(SP_NAME, MODE_PRIVATE);
-            userName = prefs.getString("USER_NAME", "Bienvenido"); // Usamos "Bienvenido" como fallback
+            userName = prefs.getString("USER_NAME", "Bienvenido");
         }
         binding.tvUserName.setText(userName);
-        // --- FIN DEL CAMBIO ---
 
-        Object proximoViaje = null; // Simulación
 
-        if (proximoViaje == null) {
-            binding.tvNextTripTitle.setVisibility(View.GONE);
-            binding.cardNextTrip.setVisibility(View.GONE);
-            binding.cardNextTrip.setVisibility(View.VISIBLE);
-        } else {
-            binding.tvNextTripTitle.setVisibility(View.VISIBLE);
-            binding.cardNextTrip.setVisibility(View.VISIBLE);
-            binding.cardNextTrip.setVisibility(View.GONE);
-
-            binding.tvTripOrigin.setText("Chiclayo");
-            binding.tvTripDestination.setText("Jaén");
-
-            setTripInfoRow(binding.rowFecha.getRoot(), "Fecha:", "Lun, 06 Oct 2025");
-            setTripInfoRow(binding.rowHora.getRoot(), "Hora de Salida:", "08:30 AM");
-            setTripInfoRow(binding.rowPasajeros.getRoot(), "Pasajeros:", "2 Pendientes");
-        }
 
         setNavCard(binding.cardComprarPasaje.getRoot(), R.drawable.ic_local_activity, "Comprar Pasaje", "Encuentra tu ruta y reserva tu asiento.", R.color.color_principal_cumbe);
         setNavCard(binding.cardSeguimiento.getRoot(), R.drawable.ic_track_changes, "Seguimiento de Encomienda", "Consulta el estado de tu envío.", R.color.color_estado_entregado);
@@ -67,6 +58,76 @@ public class HomeActivity extends AppCompatActivity {
         setNavCard(binding.cardServicios.getRoot(), R.drawable.ic_info, "Nuestros Servicios", "Explora nuestras flotas y beneficios.", android.R.color.black);
     }
 
+    private void cargarProximoViaje() {
+        // Obtenemos el token
+        SharedPreferences prefs = getSharedPreferences(SP_NAME, MODE_PRIVATE);
+        String userToken = prefs.getString("USER_TOKEN", null);
+
+        if (userToken == null) {
+            // Si no hay token, no podemos consultar. Mostramos la tarjeta gris.
+            mostrarTarjetaGris(true);
+            return;
+        }
+
+        ApiService apiService = ApiClient.getApiService();
+        Call<ResponseProximoViaje> call = apiService.getProximoViaje(userToken);
+
+        call.enqueue(new Callback<ResponseProximoViaje>() {
+            @Override
+            public void onResponse(Call<ResponseProximoViaje> call, Response<ResponseProximoViaje> response) {
+
+                if (response.isSuccessful() && response.body() != null) {
+                    // --- ÉXITO: SÍ HAY VIAJE (CÓDIGO 200) ---
+                    ResponseProximoViaje viaje = response.body();
+                    mostrarTarjetaGris(false); // Oculta la gris, muestra la naranja
+
+                    binding.tvTripOrigin.setText(viaje.getOrigen());
+                    binding.tvTripDestination.setText(viaje.getDestino());
+                    setTripInfoRow(binding.rowFecha.getRoot(), "Fecha:", viaje.getFecha_salida());
+                    setTripInfoRow(binding.rowHora.getRoot(), "Hora de Salida:", viaje.getHora_salida());
+                    setTripInfoRow(binding.rowPasajeros.getRoot(), "Pasajeros:", String.valueOf(viaje.getCantidadPasajeros()));
+
+                } else {
+
+                    if (response.code() == 401) {
+                        // ¡SESIÓN EXPIRADA!
+                        Log.e("HomeActivity", "Error 401: Token expirado o inválido.");
+                        Toast.makeText(HomeActivity.this, "Tu sesión ha expirado. Por favor, inicia sesión de nuevo.", Toast.LENGTH_LONG).show();
+
+
+                        cerrarSesion();
+
+                    } else {
+
+                        Log.d("HomeActivity", "No se encontraron viajes futuros (Código: " + response.code() + ")");
+                        mostrarTarjetaGris(true);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseProximoViaje> call, Throwable t) {
+                // --- ERROR DE RED ---
+                Log.e("HomeActivity", "Error al cargar próximo viaje", t);
+                mostrarTarjetaGris(true); // Muestra la tarjeta gris
+                Toast.makeText(HomeActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    private void mostrarTarjetaGris(boolean mostrarGris) {
+        if (mostrarGris) {
+            binding.tvNextTripTitle.setVisibility(View.GONE);
+            binding.cardNextTrip.setVisibility(View.GONE);
+            binding.cardNoNextTrip.setVisibility(View.VISIBLE);
+        } else {
+            binding.tvNextTripTitle.setVisibility(View.VISIBLE);
+            binding.cardNextTrip.setVisibility(View.VISIBLE);
+            binding.cardNoNextTrip.setVisibility(View.GONE);
+        }
+    }
     private void setupListeners() {
         binding.btnMenu.setOnClickListener(v -> showPopupMenu(v));
 
@@ -100,7 +161,8 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         binding.cardServicios.getRoot().setOnClickListener(v -> {
-            Toast.makeText(this, "Abriendo Nuestros Servicios...", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(HomeActivity.this, ServiciosActivity.class);
+            startActivity(intent);
         });
     }
 
@@ -109,9 +171,15 @@ public class HomeActivity extends AppCompatActivity {
         popup.getMenuInflater().inflate(R.menu.home_menu, popup.getMenu());
         popup.setOnMenuItemClickListener(item -> {
             int itemId = item.getItemId();
+
             if (itemId == R.id.menu_perfil) {
-                Toast.makeText(this, "Abriendo Perfil...", Toast.LENGTH_SHORT).show();
+                // --- ESTE ES EL CAMBIO ---
+                // Toast.makeText(this, "Abriendo Perfil...", Toast.LENGTH_SHORT).show(); // <- LÍNEA ANTIGUA
+                Intent intent = new Intent(HomeActivity.this, ProfileActivity.class); // <- LÍNEA NUEVA
+                startActivity(intent); // <- LÍNEA NUEVA
                 return true;
+                // --- FIN DEL CAMBIO ---
+
             } else if (itemId == R.id.menu_cerrar_sesion) {
                 cerrarSesion();
                 return true;

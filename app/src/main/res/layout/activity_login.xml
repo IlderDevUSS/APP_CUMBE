@@ -11,6 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:padding="24dp">
 
         <ImageView
@@ -24,33 +25,48 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/tvfraseEslogan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Somos tu gente, somo tu agencia"
+            android:textSize="21sp"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:textColor="@color/color_principal_cumbe"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imgLogo" />
+
+        <TextView
             android:id="@+id/tvTituloLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:text="Iniciar Sesión"
-            android:textSize="28sp"
+            android:textSize="25sp"
             android:textStyle="bold"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imgLogo" />
+            app:layout_constraintTop_toBottomOf="@+id/tvfraseEslogan" />
 
         <TextView
             android:id="@+id/tvLabelUsuario"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="Usuario o Email"
+            android:text="Ingresar Email"
             android:textSize="16sp"
+            android:textColor="@color/gris1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvTituloLogin" />
 
         <EditText
             android:id="@+id/etEmail"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginTop="8dp"
             android:hint="Ingresa tu email"
+            style="@style/EstiloInputCumbe"
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -61,6 +77,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:textColor="@color/gris1"
             android:text="Contraseña"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -72,6 +89,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:hint="Ingresa tu contraseña"
+            style="@style/EstiloInputCumbe"
             android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -101,17 +119,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnIngresar" />
 
-        <Button
-            android:id="@+id/btnTestTracking"
-            android:layout_width="wrap_content"
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnVerServicios"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="[TEST] Ir a Tracking"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="24dp"
+            android:text="Conoce nuestra empresa y servicios"
+            android:textColor="@color/color_principal_cumbe"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            app:strokeColor="@color/color_principal_cumbe"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvIrARegistro"
-            android:layout_marginTop="24dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="24dp"/>
+            app:layout_constraintTop_toBottomOf="@+id/tvIrARegistro" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

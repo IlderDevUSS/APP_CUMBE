@@ -5,7 +5,8 @@ import com.example.app_cumbe.model.RequestRegister;
 import com.example.app_cumbe.model.ResponseRegister;
 import com.example.app_cumbe.model.RequestLogin;
 import com.example.app_cumbe.model.ResponseLogin;
-//import com.example.app_cumbe.model.Encomienda;
+import com.example.app_cumbe.model.ResponseProximoViaje;
+import com.example.app_cumbe.model.Encomienda;
 import java.util.List;
 
 import retrofit2.Call;
@@ -23,7 +24,10 @@ public interface ApiService {
     @POST("usuarios/registro")
     Call<ResponseRegister> registrarUsuario(@Body RequestRegister requestRegister);
 
-    /*Ruta para obtener encomiendas
+
     @GET("api/encomiendas")
-    Call<List<Encomienda>> getEncomiendas(@Header("Authorization") String token);*/
+    Call<List<Encomienda>> getEncomiendas(@Header("Authorization") String token);
+
+    @GET("api/proximo-viaje")
+    Call<ResponseProximoViaje> getProximoViaje(@Header("Authorization") String token);
 }
