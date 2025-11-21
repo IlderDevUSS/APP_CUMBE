@@ -22,11 +22,12 @@ public class EncomiendaAdapter extends RecyclerView.Adapter<EncomiendaAdapter.Vi
     private List<Encomienda> listaEncomiendas;
     private Context context;
     private LayoutInflater inflater;
-
-    public EncomiendaAdapter(Context context, List<Encomienda> listaEncomiendas) {
+    private String miDniUsuario;
+    public EncomiendaAdapter(Context context, List<Encomienda> listaEncomiendas, String miDniUsuario) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
         this.listaEncomiendas = listaEncomiendas;
+        this.miDniUsuario = miDniUsuario;
     }
 
     @NonNull
@@ -40,22 +41,40 @@ public class EncomiendaAdapter extends RecyclerView.Adapter<EncomiendaAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Encomienda encomienda = listaEncomiendas.get(position);
 
-        // 1. Llenar datos básicos
         String estadoTexto = encomienda.getEstado(); // "RECIBIDO", "EN_CAMINO", etc.
         String titulo = "Encomienda #" + encomienda.getTrackingCode() + " - " + estadoTexto;
-        holder.tvEncomiendaTitle.setText(titulo);
+        String etiqueta;
+        String nombre;
+        String dni;
 
+        if (miDniUsuario != null && miDniUsuario.equals(encomienda.getRemitenteDni())) {
+            etiqueta = "Para: ";
+            nombre = encomienda.getDestinatarioNombres();
+            dni = encomienda.getDestinatarioDni();
+        } else {
+
+            etiqueta = "De: ";
+            nombre = encomienda.getRemitenteNombres();
+            dni = encomienda.getRemitenteDni();
+        }
+
+        // Validación para evitar textos "null"
+        if (nombre == null) nombre = "Sin nombre";
+        if (dni == null) dni = "S/D";
+
+        // Seteamos el texto en el NUEVO TextView
+        holder.tvEncomiendaTitle.setText(titulo);
         holder.tvDetailOrigen.setText("Origen: " + encomienda.getNombreOrigen());
         holder.tvDetailDestino.setText("Destino: " + encomienda.getNombreDestino());
-        // Mostramos el precio como dato extra, o el destinatario si lo prefieres
-        holder.tvDetailDestinatario.setText("Precio: S/ " + encomienda.getPrecio());
+        holder.tvDetailPersona.setText(etiqueta + nombre + " (" + dni + ")");
+        holder.tvDetailPrecio.setText("Precio: S/ " + encomienda.getPrecio());
 
-        // 2. Lógica de Colores según estado
+
         int colorResId = getColorPorEstado(estadoTexto);
         holder.viewStatusBorder.setBackgroundColor(ContextCompat.getColor(context, colorResId));
         holder.tvEncomiendaTitle.setTextColor(ContextCompat.getColor(context, colorResId));
 
-        // 3. Acordeón (Expandir/Colapsar)
+
         holder.headerLayout.setOnClickListener(v -> {
             boolean isVisible = holder.llCollapsibleContent.getVisibility() == View.VISIBLE;
             if (isVisible) {
@@ -133,6 +152,8 @@ public class EncomiendaAdapter extends RecyclerView.Adapter<EncomiendaAdapter.Vi
         LinearLayout llCollapsibleContent, llTimelineContainer;
         TextView tvEncomiendaTitle, tvDetailOrigen, tvDetailDestino, tvDetailDestinatario;
         ImageView ivAccordionIcon;
+        TextView tvDetailPersona;
+        TextView tvDetailPrecio;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -143,7 +164,8 @@ public class EncomiendaAdapter extends RecyclerView.Adapter<EncomiendaAdapter.Vi
             tvEncomiendaTitle = itemView.findViewById(R.id.tvEncomiendaTitle);
             tvDetailOrigen = itemView.findViewById(R.id.tvDetailOrigen);
             tvDetailDestino = itemView.findViewById(R.id.tvDetailDestino);
-            tvDetailDestinatario = itemView.findViewById(R.id.tvDetailDestinatario);
+            tvDetailPersona = itemView.findViewById(R.id.tvDetailPersona);
+            tvDetailPrecio = itemView.findViewById(R.id.tvDetailPrecio);
             ivAccordionIcon = itemView.findViewById(R.id.ivAccordionIcon);
         }
     }

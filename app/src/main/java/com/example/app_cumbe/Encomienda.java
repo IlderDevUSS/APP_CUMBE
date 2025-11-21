@@ -4,9 +4,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class Encomienda {
 
-    // --- CAMPOS DE LA BASE DE DATOS ---
-    // Usamos @SerializedName para mapear el JSON del backend a variables Java
-
     @SerializedName("encomienda_id")
     private int id;
 
@@ -20,29 +17,34 @@ public class Encomienda {
     private int destinoId;
 
     @SerializedName("estado")
-    private String estado; // "RECIBIDO", "EN_CAMINO", etc.
+    private String estado;
 
     @SerializedName("remitente_dni")
     private String remitenteDni;
 
+    @SerializedName("remitente_nombres")
+    private String remitenteNombres;
+
     @SerializedName("destinatario_dni")
     private String destinatarioDni;
+
+    @SerializedName("destinatario_nombres")
+    private String destinatarioNombres;
 
     @SerializedName("precio_pagado")
     private double precio;
 
-    // Campos adicionales que podrían venir en el futuro o calcularse
+
+
     private String fechaRecibido;
     private String fechaEnCamino;
     private String fechaEnDestino;
     private String fechaEntregado;
 
 
-    // --- CONSTRUCTOR ---
-    // Actualizado para incluir todos los campos importantes
-    // Nota: Gson puede usar este constructor o uno vacío por defecto.
+
     public Encomienda(int id, String trackingCode, int origenId, int destinoId, String estado,
-                      String remitenteDni, String destinatarioDni, double precio) {
+                      String remitenteDni, String destinatarioDni,String remitenteNombres,String destinatarioNombres, double precio) {
         this.id = id;
         this.trackingCode = trackingCode;
         this.origenId = origenId;
@@ -50,14 +52,15 @@ public class Encomienda {
         this.estado = estado;
         this.remitenteDni = remitenteDni;
         this.destinatarioDni = destinatarioDni;
+        this.remitenteNombres = remitenteNombres;
+        this.destinatarioNombres = destinatarioNombres;
         this.precio = precio;
     }
 
-    // Constructor vacío (requerido a veces por ciertas versiones de convertidores)
+
     public Encomienda() {}
 
 
-    // --- GETTERS ---
 
     public int getId() { return id; }
     public String getTrackingCode() { return trackingCode; }
@@ -68,16 +71,14 @@ public class Encomienda {
     public String getDestinatarioDni() { return destinatarioDni; }
     public double getPrecio() { return precio; }
 
-    // Getters de fechas (pueden ser null)
+    public String getRemitenteNombres() { return remitenteNombres; }
+
+    public String getDestinatarioNombres() { return destinatarioNombres; }
     public String getFechaRecibido() { return fechaRecibido; }
     public String getFechaEnCamino() { return fechaEnCamino; }
     public String getFechaEnDestino() { return fechaEnDestino; }
     public String getFechaEntregado() { return fechaEntregado; }
 
-
-    // --- HELPERS (Traducción de IDs a Nombres) ---
-    // TODO: Idealmente, el backend debería devolver los nombres de las ciudades.
-    // Por ahora, hacemos la traducción manual aquí.
 
     public String getNombreOrigen() {
         return traducirIdASucursal(origenId);

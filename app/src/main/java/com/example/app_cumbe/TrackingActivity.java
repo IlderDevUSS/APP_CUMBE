@@ -84,17 +84,21 @@ public class TrackingActivity extends AppCompatActivity {
         String userDni = prefs.getString("USER_DNI", "---");
 
         tvWelcomeUser.setText("Bienvenid@, " + userName);
-        tvUserDni.setText("En este apartado puedes visualizar todas las encomiendas enviadas o por recibir con el DNI" + userDni);
+        tvUserDni.setText("En este apartado puedes visualizar todas las encomiendas enviadas o por recibir con el DNI " + userDni);
     }
 
     private void setupRecyclerViews() {
+
+        SharedPreferences prefs = getSharedPreferences(SP_NAME, MODE_PRIVATE);
+        String miDni = prefs.getString("USER_DNI", "");
+
         // Lista Enviadas
-        adapterEnviadas = new EncomiendaAdapter(this, listaEnviadas);
+        adapterEnviadas = new EncomiendaAdapter(this, listaEnviadas, miDni);
         rvEnviadas.setLayoutManager(new LinearLayoutManager(this));
         rvEnviadas.setAdapter(adapterEnviadas);
 
         // Lista Por Recibir
-        adapterPorRecibir = new EncomiendaAdapter(this, listaPorRecibir);
+        adapterPorRecibir = new EncomiendaAdapter(this, listaPorRecibir, miDni);
         rvPorRecibir.setLayoutManager(new LinearLayoutManager(this));
         rvPorRecibir.setAdapter(adapterPorRecibir);
     }

@@ -7,6 +7,8 @@ import com.example.app_cumbe.model.RequestLogin;
 import com.example.app_cumbe.model.ResponseLogin;
 import com.example.app_cumbe.model.ResponseProximoViaje;
 import com.example.app_cumbe.model.Encomienda;
+import com.example.app_cumbe.model.RequestUpdateProfile;
+
 import java.util.List;
 
 import retrofit2.Call;
@@ -14,6 +16,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 
 public interface ApiService {
 
@@ -30,4 +33,10 @@ public interface ApiService {
 
     @GET("api/proximo-viaje")
     Call<ResponseProximoViaje> getProximoViaje(@Header("Authorization") String token);
+
+    @PUT("usuarios/actualizar")
+    retrofit2.Call<ResponseRegister> actualizarUsuario(
+            @retrofit2.http.Header("Authorization") String token,
+            @retrofit2.http.Body RequestUpdateProfile request
+    );
 }

@@ -23,10 +23,15 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setupToolbar();
-        loadUserData();
+        //loadUserData();
         setupListeners();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadUserData();
+    }
     private void setupToolbar() {
         setSupportActionBar(binding.toolbarProfile);
 
@@ -75,6 +80,11 @@ public class ProfileActivity extends AppCompatActivity {
     private void setupListeners() {
         binding.btnLogout.setOnClickListener(v -> {
             cerrarSesion();
+        });
+
+        binding.btnEditarPerfil.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
+            startActivity(intent);
         });
     }
 

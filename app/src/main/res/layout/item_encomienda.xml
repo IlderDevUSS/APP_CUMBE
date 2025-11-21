@@ -78,10 +78,15 @@
                 style="@style/DetailRowText"
                 tools:text="Destino: [Nombre de la sucursal de destino]" />
             <TextView
-                android:id="@+id/tvDetailDestinatario"
+                android:id="@+id/tvDetailPersona"
                 style="@style/DetailRowText"
-                tools:text="Destinatario: [Nombre del destinatario]" />
-
+                android:textStyle="bold"
+                android:textColor="@color/color_text_primary"
+                tools:text="Para: Nombres + DNI" />
+            <TextView
+                android:id="@+id/tvDetailPrecio"
+                style="@style/DetailRowText"
+                tools:text="Precio: S/ 00.00" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"

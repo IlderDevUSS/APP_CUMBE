@@ -17,6 +17,7 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbarProfile"
             android:layout_width="match_parent"
+            android:background="@color/color_divider"
             android:layout_height="?attr/actionBarSize"
             app:title="Mi Perfil"
             app:titleTextColor="@color/color_text_primary"
@@ -92,6 +93,18 @@
             <include layout="@layout/item_profile_info" android:id="@+id/cardDni" />
             <include layout="@layout/item_profile_info" android:id="@+id/cardPhone" />
             <include layout="@layout/item_profile_info" android:id="@+id/cardBirthDate" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnEditarPerfil"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="Editar Mis Datos"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:backgroundTint="@color/color_principal_cumbe"
+                app:cornerRadius="12dp"
+                android:layout_marginTop="32dp"
+                style="@style/Widget.MaterialComponents.Button"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLogout"
