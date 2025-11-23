@@ -5,8 +5,7 @@ public class ResponseLogin {
     private String nombre;
     private String dni;
     private String email;
-
-    // --- AÑADIR ESTOS DOS CAMPOS ---
+    private String refresh_token;
     private String telefono;
     private String fecha_nacimiento;
 
@@ -17,4 +16,6 @@ public class ResponseLogin {
 
     public String getTelefono() { return telefono; }
     public String getFecha_nacimiento() { return fecha_nacimiento; }
+
+    public String getRefresh_token() { return refresh_token; }
 }

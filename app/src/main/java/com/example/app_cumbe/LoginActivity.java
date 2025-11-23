@@ -27,9 +27,9 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ApiClient.init(this);
 
-        // --- CAMBIO 1: VERIFICAR SESIÓN PRIMERO ---
-        // Antes de inflar la vista, revisamos si ya hay un token guardado.
+        // Antes de mostrar la vista revisamos si ya hay un token guardado.
         if (verificarSesion()) {
 
             navegarAlHome(null);
@@ -66,8 +66,6 @@ public class LoginActivity extends AppCompatActivity {
     private boolean verificarSesion() {
         SharedPreferences sharedPreferences = getSharedPreferences(SP_NAME, MODE_PRIVATE);
         String token = sharedPreferences.getString("USER_TOKEN", null);
-
-        // Si el token NO es nulo y NO está vacío, el usuario ya inició sesión.
         return token != null && !token.isEmpty();
     }
 
@@ -118,9 +116,8 @@ public class LoginActivity extends AppCompatActivity {
 
                         guardarDatosDeSesion(responseBody);
 
-                        // --- CAMBIO 2: USAR LA NUEVA FUNCIÓN DE NAVEGACIÓN ---
                         navegarAlHome(responseBody.getNombre());
-                        finish(); // Cerramos LoginActivity después de un login exitoso
+                        finish();
 
                     } else {
                         Toast.makeText(LoginActivity.this, "Error: Respuesta vacía del servidor", Toast.LENGTH_SHORT).show();
@@ -151,11 +148,11 @@ public class LoginActivity extends AppCompatActivity {
         editor.putString("USER_NAME", response.getNombre());
         editor.putString("USER_DNI", response.getDni());
         editor.putString("USER_EMAIL", response.getEmail());
-
-        // --- AÑADIR ESTAS DOS LÍNEAS ---
         editor.putString("USER_PHONE", response.getTelefono());
         editor.putString("USER_BIRTH_DATE", response.getFecha_nacimiento());
 
+        // Guardamos el Refresh Token
+        editor.putString("REFRESH_TOKEN", response.getRefresh_token());
         editor.apply();
     }
 

@@ -2,6 +2,7 @@ package com.example.app_cumbe.api;
 
 // 1. Importamos los nuevos modelos
 import com.example.app_cumbe.model.RequestRegister;
+import com.example.app_cumbe.model.ResponseRefresh;
 import com.example.app_cumbe.model.ResponseRegister;
 import com.example.app_cumbe.model.RequestLogin;
 import com.example.app_cumbe.model.ResponseLogin;
@@ -39,4 +40,7 @@ public interface ApiService {
             @retrofit2.http.Header("Authorization") String token,
             @retrofit2.http.Body RequestUpdateProfile request
     );
+
+    @POST("auth/refresh")
+    Call<ResponseRefresh> refreshToken(@Header("Authorization") String refreshToken);
 }

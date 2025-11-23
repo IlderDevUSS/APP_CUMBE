@@ -2,3 +2,10 @@
 plugins {
     alias(libs.plugins.android.application) apply false
 }
+/*
+
+gradle {
+    toolchains {
+        java.languageVersion = JavaLanguageVersion.of(11)
+    }
+}*/

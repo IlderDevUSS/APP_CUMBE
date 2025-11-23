@@ -17,7 +17,8 @@
         app:titleTextColor="@color/color_text_primary"
         app:navigationIcon="@drawable/ic_arrow_back"
         app:navigationIconTint="@color/color_text_primary"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleCentered="true"/>
 
     <TextView
         android:id="@+id/tvWelcomeUser"
@@ -39,10 +40,10 @@
         android:id="@+id/tvUserDni"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/gris1"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textColor="@color/gris1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvWelcomeUser"
         tools:text="En este apartado puedes visualizar todas las encomiendas enviadas o por recibir con el DNI [DNI Usuario]" />

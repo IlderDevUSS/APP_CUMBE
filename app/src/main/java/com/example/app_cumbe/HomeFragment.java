@@ -55,8 +55,6 @@ public class HomeFragment extends Fragment {
 
         setNavCard(binding.cardComprarPasaje.getRoot(), R.drawable.ic_local_activity, "Comprar Pasaje", "Encuentra tu ruta y reserva tu asiento.", R.color.color_principal_cumbe);
         setNavCard(binding.cardSeguimiento.getRoot(), R.drawable.ic_track_changes, "Seguimiento de Encomienda", "Consulta el estado de tu envío.", R.color.color_estado_entregado);
-        setNavCard(binding.cardMisTickets.getRoot(), R.drawable.ic_history, "Mis Tickets", "Revisa tus viajes futuros.", android.R.color.black);
-        setNavCard(binding.cardServicios.getRoot(), R.drawable.ic_info, "Nuestros Servicios", "Explora nuestras flotas y beneficios.", android.R.color.black);
     }
 
     private void cargarProximoViaje() {
@@ -116,14 +114,6 @@ public class HomeFragment extends Fragment {
             startActivity(intent);
         });
 
-        binding.cardServicios.getRoot().setOnClickListener(v -> {
-            Intent intent = new Intent(requireContext(), ServiciosActivity.class);
-            startActivity(intent);
-        });
-
-        // Placeholders
-        binding.cardComprarPasaje.getRoot().setOnClickListener(v -> Toast.makeText(requireContext(), "Pronto: Comprar Pasaje", Toast.LENGTH_SHORT).show());
-        binding.cardMisTickets.getRoot().setOnClickListener(v -> Toast.makeText(requireContext(), "Pronto: Mis Tickets", Toast.LENGTH_SHORT).show());
     }
 
     private void setNavCard(View cardView, int iconResId, String title, String description, int iconColorResId) {

@@ -206,26 +206,12 @@
                 <include layout="@layout/item_nav_card" android:id="@+id/cardComprarPasaje"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    />
+                    android:layout_marginTop="20dp" />
 
                 <include layout="@layout/item_nav_card" android:id="@+id/cardSeguimiento"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    />
-
-                <include layout="@layout/item_nav_card" android:id="@+id/cardMisTickets"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    />
-
-                <include layout="@layout/item_nav_card" android:id="@+id/cardServicios"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    />
+                    android:layout_marginTop="20dp" />
 
             </LinearLayout>
         </LinearLayout>
@@ -243,8 +229,10 @@
             android:layout_width="match_parent"
             android:layout_height="155dp"
             android:background="@drawable/bus_3"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/mainContent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintVertical_bias="1.0"
+            tools:layout_editor_absoluteX="0dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
