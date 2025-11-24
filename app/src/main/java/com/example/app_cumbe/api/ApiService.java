@@ -1,6 +1,7 @@
 package com.example.app_cumbe.api;
 
 // 1. Importamos los nuevos modelos
+import com.example.app_cumbe.model.Horario;
 import com.example.app_cumbe.model.RequestRegister;
 import com.example.app_cumbe.model.ResponseRefresh;
 import com.example.app_cumbe.model.ResponseRegister;
@@ -18,6 +19,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Query;
 
 public interface ApiService {
 
@@ -43,4 +45,13 @@ public interface ApiService {
 
     @POST("auth/refresh")
     Call<ResponseRefresh> refreshToken(@Header("Authorization") String refreshToken);
+
+    @GET("api/horarios")
+    Call<List<Horario>> buscarHorarios(
+            @Header("Authorization") String token,
+            @Query("origen") String origen,
+            @Query("destino") String destino,
+            @Query("fecha") String fecha
+    );
+
 }

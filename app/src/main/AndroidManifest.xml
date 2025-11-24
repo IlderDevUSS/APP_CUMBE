@@ -58,7 +58,7 @@
             android:exported="false"
             android:theme="@style/Theme.APP_Cumbe.NoActionBar" />
         <activity
-            android:name=".ProfileActivity"
+            android:name=".CompraPasajeActivity"
             android:exported="false"
             android:theme="@style/Theme.APP_Cumbe.NoActionBar" />
 

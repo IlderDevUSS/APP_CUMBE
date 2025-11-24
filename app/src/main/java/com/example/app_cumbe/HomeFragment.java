@@ -113,7 +113,10 @@ public class HomeFragment extends Fragment {
             Intent intent = new Intent(requireContext(), TrackingActivity.class);
             startActivity(intent);
         });
-
+        binding.cardComprarPasaje.getRoot().setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), CompraPasajeActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void setNavCard(View cardView, int iconResId, String title, String description, int iconColorResId) {
