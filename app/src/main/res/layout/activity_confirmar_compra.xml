@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Confirmar Compra"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- Tarjeta de Resumen -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/white"
+            android:layout_marginBottom="24dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:id="@+id/tvResumenRuta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ruta del Viaje"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/color_principal_cumbe"/>
+
+                <TextView
+                    android:id="@+id/tvResumenFecha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Fecha y Hora"
+                    android:textColor="@color/gris1"
+                    android:layout_marginBottom="16dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#EEE"
+                    android:layout_marginBottom="16dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView android:text="Asiento" android:textSize="12sp" android:textColor="@color/gris1"/>
+                        <TextView android:id="@+id/tvResumenAsiento" android:text="#24" android:textSize="18sp" android:textStyle="bold" android:textColor="@color/black"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView android:text="Piso" android:textSize="12sp" android:textColor="@color/gris1"/>
+                        <TextView android:id="@+id/tvResumenPiso" android:text="2" android:textSize="18sp" android:textStyle="bold" android:textColor="@color/black"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvResumenPasajero"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Pasajero: Juan Perez"
+                    android:layout_marginTop="16dp"
+                    android:textSize="14sp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#EEE"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:justifyContent="space-between">
+                    <TextView android:text="Total a Pagar:" android:textSize="18sp" android:textStyle="bold" android:textColor="@color/black"/>
+                    <TextView android:id="@+id/tvTotalPagar" android:text="S/ 0.00" android:textSize="20sp" android:textStyle="bold" android:textColor="@color/color_principal_cumbe"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Selección de Método de Pago -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Método de Pago"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp"
+            android:textColor="@color/black"/>
+
+        <RadioGroup
+            android:id="@+id/rgMetodoPago"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="24dp">
+
+            <RadioButton
+                android:id="@+id/rbYape"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Yape (Simulado)"
+                android:padding="12dp"
+                android:background="@drawable/bg_input_cumbe"
+                android:layout_marginBottom="8dp"
+                android:buttonTint="@color/color_principal_cumbe"/>
+
+            <RadioButton
+                android:id="@+id/rbTarjeta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tarjeta Débito/Crédito"
+                android:padding="12dp"
+                android:background="@drawable/bg_input_cumbe"
+                android:layout_marginBottom="8dp"
+                android:buttonTint="@color/color_principal_cumbe"/>
+
+            <RadioButton
+                android:id="@+id/rbEfectivo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Efectivo (Pagar en Agencia)"
+                android:padding="12dp"
+                android:background="@drawable/bg_input_cumbe"
+                android:buttonTint="@color/color_principal_cumbe"/>
+        </RadioGroup>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnPagarFinal"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="Confirmar y Pagar"
+            android:textSize="16sp"
+            app:backgroundTint="@color/color_principal_cumbe"
+            app:cornerRadius="12dp"/>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

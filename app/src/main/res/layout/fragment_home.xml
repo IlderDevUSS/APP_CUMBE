@@ -1,4 +1,4 @@
-tarjeta <androidx.core.widget.NestedScrollView
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -170,6 +170,7 @@ tarjeta <androidx.core.widget.NestedScrollView
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:minHeight="220dp"
                     android:background="@drawable/bg_gradient_no_next_trip"
                     android:orientation="vertical"
                     android:padding="20dp">

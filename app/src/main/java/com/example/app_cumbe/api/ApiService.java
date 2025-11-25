@@ -1,6 +1,7 @@
 package com.example.app_cumbe.api;
 
 // 1. Importamos los nuevos modelos
+import com.example.app_cumbe.model.AsientoOcupado;
 import com.example.app_cumbe.model.Horario;
 import com.example.app_cumbe.model.RequestRegister;
 import com.example.app_cumbe.model.ResponseRefresh;
@@ -19,6 +20,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiService {
@@ -52,6 +54,12 @@ public interface ApiService {
             @Query("origen") String origen,
             @Query("destino") String destino,
             @Query("fecha") String fecha
+    );
+
+    @GET("api/viajes/{horario_id}/asientos")
+    Call<List<AsientoOcupado>> obtenerAsientosOcupados(
+            @Header("Authorization") String token,
+            @Path("horario_id") int horarioId
     );
 
 }

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -47,6 +48,9 @@ public class CompraPasajeActivity extends AppCompatActivity {
     // Control para evitar bucles infinitos al actualizar spinners
     private boolean isUpdatingSpinners = false;
 
+    // Variable para guardar el horario que el usuario tocó (Opcional si navegas directo)
+    private Horario horarioSeleccionado = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,8 +81,10 @@ public class CompraPasajeActivity extends AppCompatActivity {
         listaOrigen.add("-- Seleccionar --");
         for (String ciudad : ciudadesBase) listaOrigen.add(ciudad);
 
-        ArrayAdapter<String> adapterOrigen = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, listaOrigen);
-        adapterOrigen.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Usamos layout personalizado para el item cerrado
+        ArrayAdapter<String> adapterOrigen = new ArrayAdapter<>(this, R.layout.spinner_item, listaOrigen);
+        // Usamos layout personalizado para el dropdown abierto
+        adapterOrigen.setDropDownViewResource(R.layout.item_spinner_dropdown);
         binding.spinnerOrigen.setAdapter(adapterOrigen);
 
         // 2. Configurar Spinner Destino (Inicialmente todas)
@@ -136,8 +142,8 @@ public class CompraPasajeActivity extends AppCompatActivity {
             }
         }
 
-        ArrayAdapter<String> adapterDestino = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, listaDestino);
-        adapterDestino.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> adapterDestino = new ArrayAdapter<>(this, R.layout.spinner_item, listaDestino);
+        adapterDestino.setDropDownViewResource(R.layout.item_spinner_dropdown);
         binding.spinnerDestino.setAdapter(adapterDestino);
 
         // Intentar mantener la selección previa si aún es válida
@@ -185,12 +191,27 @@ public class CompraPasajeActivity extends AppCompatActivity {
         dpd.show();
     }
 
+    // --- AQUÍ ESTÁ LA LÓGICA QUE PEDÍAS ---
     private void setupRecyclerView() {
-        // Configurar el adaptador con la lógica de selección única
+        // Configurar el adaptador
         adapter = new HorarioAdapter(this, listaHorarios, horario -> {
-            // Al hacer click, el adaptador maneja visualmente la selección
-            // Aquí puedes habilitar un botón de "Continuar" si quisieras
-            // Toast.makeText(this, "Seleccionado: " + horario.getHoraSalida(), Toast.LENGTH_SHORT).show();
+            // AL HACER CLICK EN UN HORARIO (Callback del Listener)
+
+            // 1. Guardar referencia (opcional)
+            horarioSeleccionado = horario;
+
+            // 2. Navegar directamente a la siguiente pantalla
+            Intent intent = new Intent(CompraPasajeActivity.this, SeleccionAsientoActivity.class);
+
+            // Pasamos el ID del horario para cargar los asientos ocupados
+            intent.putExtra("HORARIO_ID", horario.getId());
+
+            // Pasamos configuración del bus para dibujar el mapa correctamente
+            // Asegúrate de tener estos getters en tu modelo Horario.java
+            intent.putExtra("TOTAL_ASIENTOS", horario.getTotalAsientos());
+            intent.putExtra("NUM_PISOS", horario.getNumPisos());
+
+            startActivity(intent);
         });
 
         binding.rvHorarios.setLayoutManager(new LinearLayoutManager(this));
@@ -229,7 +250,7 @@ public class CompraPasajeActivity extends AppCompatActivity {
                     listaHorarios.clear();
                     listaHorarios.addAll(response.body());
 
-                    // Resetear selección en el adaptador porque cargamos nuevos datos
+                    // Resetear selección visual en el adaptador al cargar nuevos datos
                     adapter.resetSelection();
 
                     if (listaHorarios.isEmpty()) {
