@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.example.app_cumbe.api.ApiClient;
@@ -22,14 +23,14 @@ public class ConfirmarCompraActivity extends AppCompatActivity {
 
     private ActivityConfirmarCompraBinding binding;
 
-    // Datos recibidos del flujo de compra
+    // Datos del viaje
     private int horarioId, asiento, piso;
     private double precio = 40.00;
     private String rutaStr = "";
     private String fechaStr = "";
 
-    // Datos del usuario logueado (quien compra)
-    private String nombreUser, dniUser;
+    // Datos del usuario (Dueño de la cuenta)
+    private String misNombres, misApellidos, miDni, miCelular;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,89 +38,166 @@ public class ConfirmarCompraActivity extends AppCompatActivity {
         binding = ActivityConfirmarCompraBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // 1. Recibir datos del Intent
+        recibirDatosIntent();
+        cargarDatosUsuarioSesion();
+        setupUI();
+        setupListeners();
+    }
+
+    private void recibirDatosIntent() {
         Intent i = getIntent();
         horarioId = i.getIntExtra("HORARIO_ID", 0);
         asiento = i.getIntExtra("ASIENTO", 0);
         piso = i.getIntExtra("PISO", 1);
 
-        // Recibir datos opcionales si los pasaste
         if (i.hasExtra("PRECIO")) precio = i.getDoubleExtra("PRECIO", 40.0);
-        if (i.hasExtra("RUTA")) rutaStr = i.getStringExtra("RUTA");
-        if (i.hasExtra("FECHA")) fechaStr = i.getStringExtra("FECHA");
+        rutaStr = i.getStringExtra("RUTA");
+        if (rutaStr == null) rutaStr = "";
+        fechaStr = i.getStringExtra("FECHA");
+        if (fechaStr == null) fechaStr = "";
+    }
 
-        // 2. Cargar datos del usuario
+    private void cargarDatosUsuarioSesion() {
         SharedPreferences prefs = getSharedPreferences(SP_NAME, MODE_PRIVATE);
-        nombreUser = prefs.getString("USER_NAME", "Usuario");
-        dniUser = prefs.getString("USER_DNI", "");
+        String nombreCompleto = prefs.getString("USER_NAME", "");
+        miDni = prefs.getString("USER_DNI", "");
+        miCelular = prefs.getString("USER_PHONE", ""); // Asegúrate de guardar esto en LoginActivity
 
-        // 3. Llenar la UI con el resumen
+        // Separar nombre completo en Nombres y Apellidos (Lógica básica)
+        String[] partes = nombreCompleto.split(" ");
+        if (partes.length > 2) {
+            // Ejemplo: "Juan Carlos" "Perez Lopez"
+            misNombres = partes[0] + " " + partes[1];
+            misApellidos = "";
+            for(int k=2; k<partes.length; k++) misApellidos += partes[k] + " ";
+        } else if (partes.length == 2) {
+            misNombres = partes[0];
+            misApellidos = partes[1];
+        } else {
+            misNombres = nombreCompleto;
+            misApellidos = "";
+        }
+        misApellidos = misApellidos.trim();
+    }
+
+    private void setupUI() {
+        // Llenar resumen visual
         binding.tvResumenAsiento.setText("#" + asiento);
         binding.tvResumenPiso.setText(String.valueOf(piso));
-        binding.tvResumenPasajero.setText("Pasajero: " + nombreUser + "\nDNI: " + dniUser);
         binding.tvTotalPagar.setText("S/ " + String.format("%.2f", precio));
-
         binding.tvResumenRuta.setText(rutaStr.isEmpty() ? "Ruta Seleccionada" : rutaStr);
         binding.tvResumenFecha.setText(fechaStr.isEmpty() ? "Fecha del Viaje" : fechaStr);
 
-        // 4. Listener del Botón Pagar
-        binding.btnPagarFinal.setOnClickListener(v -> {
-            validarYPagar();
+        // Estado inicial del formulario (Marcado "Soy yo")
+        llenarFormularioConMisDatos();
+    }
+
+    private void setupListeners() {
+        // Lógica del Checkbox
+        binding.cbSoyPasajero.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                llenarFormularioConMisDatos();
+                habilitarEdicion(false); // Bloquear campos para no editar datos del perfil por error
+            } else {
+                limpiarFormulario();
+                habilitarEdicion(true);
+            }
         });
+
+        binding.btnPagarFinal.setOnClickListener(v -> validarYPagar());
+    }
+
+    private void llenarFormularioConMisDatos() {
+        binding.etPasajeroDni.setText(miDni);
+        binding.etPasajeroNombres.setText(misNombres);
+        binding.etPasajeroApellidos.setText(misApellidos);
+        binding.etPasajeroCelular.setText(miCelular);
+    }
+
+    private void limpiarFormulario() {
+        binding.etPasajeroDni.setText("");
+        binding.etPasajeroNombres.setText("");
+        binding.etPasajeroApellidos.setText("");
+        binding.etPasajeroCelular.setText("");
+        binding.etPasajeroDni.requestFocus();
+    }
+
+    private void habilitarEdicion(boolean habilitar) {
+        // Si quieres que siempre se pueda editar (incluso siendo "yo"), borra este método
+        // y las llamadas a él. Si prefieres bloquearlo:
+        binding.etPasajeroDni.setEnabled(habilitar);
+        binding.etPasajeroNombres.setEnabled(habilitar);
+        binding.etPasajeroApellidos.setEnabled(habilitar);
+        binding.etPasajeroCelular.setEnabled(habilitar);
     }
 
     private void validarYPagar() {
-        // 1. Validar método de pago seleccionado
-        int selectedId = binding.rgMetodoPago.getCheckedRadioButtonId();
-        if (selectedId == -1) {
-            Toast.makeText(this, "Por favor selecciona un método de pago", Toast.LENGTH_SHORT).show();
+        // 1. Obtener datos del formulario
+        String dni = binding.etPasajeroDni.getText().toString().trim();
+        String nombres = binding.etPasajeroNombres.getText().toString().trim();
+        String apellidos = binding.etPasajeroApellidos.getText().toString().trim();
+        String celular = binding.etPasajeroCelular.getText().toString().trim();
+
+        // 2. Validaciones
+        if (dni.isEmpty() || dni.length() != 8) {
+            binding.etPasajeroDni.setError("DNI inválido (8 dígitos)");
+            return;
+        }
+        if (nombres.isEmpty()) {
+            binding.etPasajeroNombres.setError("Ingrese nombres");
+            return;
+        }
+        if (apellidos.isEmpty()) {
+            binding.etPasajeroApellidos.setError("Ingrese apellidos");
             return;
         }
 
+        // 3. Método de Pago
+        int selectedId = binding.rgMetodoPago.getCheckedRadioButtonId();
+        if (selectedId == -1) {
+            Toast.makeText(this, "Selecciona un método de pago", Toast.LENGTH_SHORT).show();
+            return;
+        }
         String metodoPago = "";
         if (selectedId == R.id.rbYape) metodoPago = "YAPE";
         else if (selectedId == R.id.rbTarjeta) metodoPago = "TARJETA";
         else if (selectedId == R.id.rbEfectivo) metodoPago = "EFECTIVO";
 
-        // 2. Preparar datos del pasajero
-        String[] partes = nombreUser.split(" ");
-        String nom = partes.length > 0 ? partes[0] : nombreUser;
-        String ape = partes.length > 1 ? partes[1] : "";
-
-        // 3. Llamar a la API
-        realizarCompra(nom, ape, dniUser, metodoPago);
+        // 4. Proceder a la compra
+        realizarCompra(nombres, apellidos, dni, celular, metodoPago);
     }
 
-    private void realizarCompra(String nom, String ape, String dni, String metodo) {
+    private void realizarCompra(String nom, String ape, String dni, String cel, String metodo) {
         binding.btnPagarFinal.setEnabled(false);
-        binding.btnPagarFinal.setText("Procesando pago...");
+        binding.btnPagarFinal.setText("Procesando...");
 
         ApiService api = ApiClient.getApiService();
         SharedPreferences prefs = getSharedPreferences(SP_NAME, MODE_PRIVATE);
         String token = prefs.getString("USER_TOKEN", "");
 
-        RequestCompra request = new RequestCompra(horarioId, asiento, piso, precio, nom, ape, dni, metodo);
+        // Usamos el constructor actualizado con 'celular'
+        RequestCompra request = new RequestCompra(horarioId, asiento, piso, precio, nom, ape, dni, cel, metodo);
 
         api.comprarPasaje(token, request).enqueue(new Callback<ResponseCompra>() {
             @Override
             public void onResponse(Call<ResponseCompra> call, Response<ResponseCompra> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    // ¡ÉXITO! Pasamos a la pantalla del TICKET
+                    // Éxito
                     Intent intent = new Intent(ConfirmarCompraActivity.this, TicketActivity.class);
 
-                    // Pasamos datos clave para mostrar el ticket
+                    // Asegúrate de pasar estos datos exactos
                     intent.putExtra("PASAJE_ID", response.body().getPasajeId());
                     intent.putExtra("TRANSACCION_ID", response.body().getTransaccionId());
-                    intent.putExtra("RUTA", rutaStr);
-                    intent.putExtra("FECHA", fechaStr);
+                    intent.putExtra("RUTA", rutaStr != null ? rutaStr : "Ruta"); // Protección extra
+                    intent.putExtra("FECHA", fechaStr != null ? fechaStr : "Fecha"); // Protección extra
                     intent.putExtra("ASIENTO", asiento);
 
                     startActivity(intent);
-                    finish(); // Cerramos confirmación para no volver atrás
+                    finish();
                 } else {
                     binding.btnPagarFinal.setEnabled(true);
                     binding.btnPagarFinal.setText("Confirmar y Pagar");
-                    Toast.makeText(ConfirmarCompraActivity.this, "Error: " + response.message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ConfirmarCompraActivity.this, "Error en la compra: " + response.message(), Toast.LENGTH_SHORT).show();
                 }
             }
 

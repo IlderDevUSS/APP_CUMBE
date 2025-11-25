@@ -24,11 +24,17 @@ public class RequestCompra {
     @SerializedName("dni")
     private String dni;
 
-    // NUEVO CAMPO IMPORTANTE
+    // --- NUEVO CAMPO: Celular ---
+    // Asegúrate que tu backend espere "celular" o cambia el SerializedName a "pasajero_celular" si es necesario
+    @SerializedName("celular")
+    private String celular;
+
     @SerializedName("metodo_pago")
     private String metodoPago;
 
-    public RequestCompra(int horarioId, int numeroAsiento, int piso, double precio, String nombres, String apellidos, String dni, String metodoPago) {
+    // Constructor actualizado
+    public RequestCompra(int horarioId, int numeroAsiento, int piso, double precio,
+                         String nombres, String apellidos, String dni, String celular, String metodoPago) {
         this.horarioId = horarioId;
         this.numeroAsiento = numeroAsiento;
         this.piso = piso;
@@ -36,6 +42,7 @@ public class RequestCompra {
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.dni = dni;
+        this.celular = celular;
         this.metodoPago = metodoPago;
     }
 }

@@ -45,6 +45,9 @@ public class HomeActivity extends AppCompatActivity {
         lastInteractionTime = System.currentTimeMillis();
         initInactivityTimer();
 
+        // No dependemos solo del Intent para cargar datos, el fragmento lo hará por sí mismo
+        // Pero si HomeActivity tuviera UI propia con nombre, aquí lo cargaríamos.
+
         loadFragment(homeFragment);
 
         binding.bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -86,11 +89,15 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void startInactivityTimer() {
-        handler.postDelayed(logoutRunnable, TIEMPO_INACTIVIDAD);
+        if (handler != null && logoutRunnable != null) {
+            handler.postDelayed(logoutRunnable, TIEMPO_INACTIVIDAD);
+        }
     }
 
     private void stopInactivityTimer() {
-        handler.removeCallbacks(logoutRunnable);
+        if (handler != null && logoutRunnable != null) {
+            handler.removeCallbacks(logoutRunnable);
+        }
     }
 
     private void resetInactivityTimer() {
@@ -123,13 +130,6 @@ public class HomeActivity extends AppCompatActivity {
         // No borramos lastInteractionTime aquí, para que persista en memoria mientras la app vive en background
     }
 
-    /**
-     * Para cerrar sesión al matar la app, usaremos onDestroy.
-     * Sin embargo, Android a veces mata el proceso sin llamar a onDestroy.
-     * La forma más segura es NO guardar el estado de "Logueado" permanentemente si quieres
-     * que al cerrar la app se vaya la sesión, PERO eso contradice el "Refresh Token" de 30 días.
-     * * Si quieres que AL CERRAR LA APP (Matarla) se cierre la sesión:
-     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -137,7 +137,7 @@ public class HomeActivity extends AppCompatActivity {
 
         // Si el usuario está cerrando la actividad explícitamente (no rotación de pantalla)
         if (isFinishing()) {
-            borrarDatosSesion();
+            // Opcional: borrarDatosSesion(); si quieres logout al cerrar la app
         }
     }
 

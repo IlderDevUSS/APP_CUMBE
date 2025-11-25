@@ -4,13 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -48,16 +46,32 @@ public class HomeFragment extends Fragment {
         setupListeners();
     }
 
-    private void loadData() {
-        SharedPreferences prefs = requireContext().getSharedPreferences(SP_NAME, MODE_PRIVATE);
-        String userName = prefs.getString("USER_NAME", "Bienvenido");
-        binding.tvUserName.setText(userName);
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Recargar datos al volver (importante si se editó el perfil o se vuelve de otra actividad)
+        loadData();
+    }
 
+    private void loadData() {
+        if (getActivity() == null) return;
+
+        SharedPreferences prefs = requireContext().getSharedPreferences(SP_NAME, MODE_PRIVATE);
+        // LEER SIEMPRE DE PREFS, el valor por defecto es "Usuario"
+        String userName = prefs.getString("USER_NAME", "Usuario");
+
+        if (binding.tvUserName != null) {
+            binding.tvUserName.setText(userName);
+        }
+
+        // Configuración de tarjetas (esto no cambia mucho)
         setNavCard(binding.cardComprarPasaje.getRoot(), R.drawable.ic_local_activity, "Comprar Pasaje", "Encuentra tu ruta y reserva tu asiento.", R.color.color_principal_cumbe);
         setNavCard(binding.cardSeguimiento.getRoot(), R.drawable.ic_track_changes, "Seguimiento de Encomienda", "Consulta el estado de tu envío.", R.color.color_estado_entregado);
     }
 
     private void cargarProximoViaje() {
+        if (getContext() == null) return;
+
         SharedPreferences prefs = requireContext().getSharedPreferences(SP_NAME, MODE_PRIVATE);
         String userToken = prefs.getString("USER_TOKEN", null);
 
@@ -72,7 +86,7 @@ public class HomeFragment extends Fragment {
         call.enqueue(new Callback<ResponseProximoViaje>() {
             @Override
             public void onResponse(Call<ResponseProximoViaje> call, Response<ResponseProximoViaje> response) {
-                if (!isAdded()) return; // Evita crashes si el fragmento ya no existe
+                if (!isAdded() || binding == null) return;
 
                 if (response.isSuccessful() && response.body() != null) {
                     ResponseProximoViaje viaje = response.body();
@@ -89,13 +103,14 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailure(Call<ResponseProximoViaje> call, Throwable t) {
-                if (!isAdded()) return;
+                if (!isAdded() || binding == null) return;
                 mostrarTarjetaGris(true);
             }
         });
     }
 
     private void mostrarTarjetaGris(boolean mostrarGris) {
+        if (binding == null) return;
         if (mostrarGris) {
             binding.tvNextTripTitle.setVisibility(View.GONE);
             binding.cardNextTrip.setVisibility(View.GONE);
@@ -108,7 +123,6 @@ public class HomeFragment extends Fragment {
     }
 
     private void setupListeners() {
-        // Navegaciones a otras Activities
         binding.cardSeguimiento.getRoot().setOnClickListener(v -> {
             Intent intent = new Intent(requireContext(), TrackingActivity.class);
             startActivity(intent);

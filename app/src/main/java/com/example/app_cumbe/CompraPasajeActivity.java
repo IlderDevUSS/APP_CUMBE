@@ -195,23 +195,20 @@ public class CompraPasajeActivity extends AppCompatActivity {
     private void setupRecyclerView() {
         // Configurar el adaptador
         adapter = new HorarioAdapter(this, listaHorarios, horario -> {
-            // AL HACER CLICK EN UN HORARIO (Callback del Listener)
+            // AL HACER CLICK EN UN HORARIO
 
-            // 1. Guardar referencia (opcional)
-            horarioSeleccionado = horario;
-
-            // 2. Navegar directamente a la siguiente pantalla
             Intent intent = new Intent(CompraPasajeActivity.this, SeleccionAsientoActivity.class);
 
-            // Pasamos el ID del horario para cargar los asientos ocupados
             intent.putExtra("HORARIO_ID", horario.getId());
-
-            // Pasamos configuración del bus para dibujar el mapa correctamente
-            // Asegúrate de tener estos getters en tu modelo Horario.java
             intent.putExtra("TOTAL_ASIENTOS", horario.getTotalAsientos());
             intent.putExtra("NUM_PISOS", horario.getNumPisos());
             intent.putExtra("PRECIO", horario.getPrecio());
 
+            // --- AGREGA ESTAS LÍNEAS ---
+            String rutaFormat = origenSeleccionado + " - " + destinoSeleccionado;
+            intent.putExtra("RUTA", rutaFormat);
+            intent.putExtra("FECHA", fechaSeleccionada + " " + horario.getHoraSalida());
+            // ---------------------------
 
             startActivity(intent);
         });
