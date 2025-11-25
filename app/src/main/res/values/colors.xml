@@ -14,7 +14,6 @@
     <color name="color_estado_en_destino">#FF9800</color>
     <color name="color_estado_encamino">#FFC107</color>
     <color name="color_estado_recibido">#0277BD</color> <color name="color_timeline_pending">#CCCCCC</color>
-    <color name="color_gris_tarjeta">#9B9898</color>
 
     <!-- NUEVOS COLORES PARA EL DISEÑO MODERNO -->
     <color name="color_surface_bg">#F8F9FA</color>
@@ -26,5 +25,9 @@
     <!-- Gradiente moderno -->
     <color name="gradient_start">#ec7656</color>
     <color name="gradient_end">#FF8A65</color>
+
+    <!-- Gradiente gris -->
+    <color name="gradient_gray_start">#A9A9A9</color>
+    <color name="gradient_gray_end">#808080</color>
 
 </resources>

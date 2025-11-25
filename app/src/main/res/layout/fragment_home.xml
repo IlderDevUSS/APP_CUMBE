@@ -1,4 +1,4 @@
-<androidx.core.widget.NestedScrollView
+tarjeta <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -165,24 +165,63 @@
                 android:layout_height="wrap_content"
                 app:cardElevation="8dp"
                 app:cardCornerRadius="15dp"
-                app:cardBackgroundColor="@color/color_gris_tarjeta"
                 android:visibility="gone"
                 tools:visibility="visible">
-
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Sin tickets comprados."
-                    android:textSize="16sp"
-                    android:textStyle="italic"
-                    android:gravity="center"
-                    android:paddingTop="50dp"
-                    android:paddingBottom="50dp"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:textColor="@color/black"
-                    android:alpha="0.6"/>
-
+                    android:background="@drawable/bg_gradient_no_next_trip"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="10dp"
+                        android:layout_marginBottom="15dp">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent">
+                            <TextView
+                                android:id="@+id/tvNoTripOrigin"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/no_pending_tickets_title"
+                                android:textColor="@color/white"
+                                android:textStyle="bold"
+                                android:textSize="18sp"/>
+                        </LinearLayout>
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_local_activity"
+                            app:tint="@color/white"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:background="#40FFFFFF"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_pending_tickets_message"
+                        android:textColor="@color/white"
+                        android:alpha="0.8"
+                        android:textSize="12sp"
+                        android:textStyle="italic"
+                        android:gravity="center"
+                        android:layout_marginTop="15dp"/>
+                </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <TextView
