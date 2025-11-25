@@ -65,6 +65,15 @@
             android:name=".SeleccionAsientoActivity"
             android:exported="false"
             android:theme="@style/Theme.APP_Cumbe.NoActionBar" />
+        <activity
+            android:name=".TicketActivity"
+            android:exported="false"
+            android:theme="@style/Theme.APP_Cumbe.NoActionBar" />
+        <activity
+            android:name=".ConfirmarCompraActivity"
+            android:exported="false"
+            android:theme="@style/Theme.APP_Cumbe.NoActionBar" />
+
 
     </application>
 

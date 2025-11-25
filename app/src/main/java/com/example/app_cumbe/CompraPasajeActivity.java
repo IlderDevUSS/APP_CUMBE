@@ -210,6 +210,8 @@ public class CompraPasajeActivity extends AppCompatActivity {
             // Asegúrate de tener estos getters en tu modelo Horario.java
             intent.putExtra("TOTAL_ASIENTOS", horario.getTotalAsientos());
             intent.putExtra("NUM_PISOS", horario.getNumPisos());
+            intent.putExtra("PRECIO", horario.getPrecio());
+
 
             startActivity(intent);
         });

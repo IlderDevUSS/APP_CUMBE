@@ -3,7 +3,9 @@ package com.example.app_cumbe.api;
 // 1. Importamos los nuevos modelos
 import com.example.app_cumbe.model.AsientoOcupado;
 import com.example.app_cumbe.model.Horario;
+import com.example.app_cumbe.model.RequestCompra;
 import com.example.app_cumbe.model.RequestRegister;
+import com.example.app_cumbe.model.ResponseCompra;
 import com.example.app_cumbe.model.ResponseRefresh;
 import com.example.app_cumbe.model.ResponseRegister;
 import com.example.app_cumbe.model.RequestLogin;
@@ -60,6 +62,12 @@ public interface ApiService {
     Call<List<AsientoOcupado>> obtenerAsientosOcupados(
             @Header("Authorization") String token,
             @Path("horario_id") int horarioId
+    );
+
+    @POST("api/pasajes/comprar")
+    Call<ResponseCompra> comprarPasaje(
+            @Header("Authorization") String token,
+            @Body RequestCompra request
     );
 
 }

@@ -24,6 +24,7 @@ public class RequestCompra {
     @SerializedName("dni")
     private String dni;
 
+    // NUEVO CAMPO IMPORTANTE
     @SerializedName("metodo_pago")
     private String metodoPago;
 

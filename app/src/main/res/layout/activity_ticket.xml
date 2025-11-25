@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/color_principal_cumbe"
+    android:gravity="center"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="¡Compra Exitosa!"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- El Ticket Visual -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="@color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/logocumbe"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:id="@+id/tvTicketRuta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lima - Trujillo"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/tvTicketFecha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="25 Nov - 08:30 PM"
+                android:textAlignment="center"
+                android:textColor="@color/gris1"
+                android:layout_marginBottom="24dp"/>
+
+            <!-- Línea punteada simulada -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@drawable/bg_white_pill"
+                android:backgroundTint="#DDD"
+                android:layout_marginBottom="24dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center">
+                    <TextView android:text="ASIENTO" android:textSize="12sp" android:textColor="@color/gris1"/>
+                    <TextView android:id="@+id/tvTicketAsiento" android:text="24" android:textSize="24sp" android:textStyle="bold" android:textColor="@color/color_principal_cumbe"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center">
+                    <TextView android:text="TICKET #" android:textSize="12sp" android:textColor="@color/gris1"/>
+                    <TextView android:id="@+id/tvTicketId" android:text="1024" android:textSize="24sp" android:textStyle="bold" android:textColor="@color/black"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvTransaccionInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Transacción: #5555"
+                android:gravity="center"
+                android:textSize="12sp"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/gris2"/>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnVolverInicio"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="Volver al Inicio"
+        android:layout_marginTop="32dp"
+        app:backgroundTint="@color/white"
+        android:textColor="@color/color_principal_cumbe"
+        app:cornerRadius="12dp"/>
+
+</LinearLayout>
