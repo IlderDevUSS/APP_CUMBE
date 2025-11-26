@@ -203,12 +203,11 @@ public class CompraPasajeActivity extends AppCompatActivity {
             intent.putExtra("TOTAL_ASIENTOS", horario.getTotalAsientos());
             intent.putExtra("NUM_PISOS", horario.getNumPisos());
             intent.putExtra("PRECIO", horario.getPrecio());
-
-            // --- AGREGA ESTAS LÍNEAS ---
+            intent.putExtra("SERVICIO", horario.getClaseBus());
             String rutaFormat = origenSeleccionado + " - " + destinoSeleccionado;
             intent.putExtra("RUTA", rutaFormat);
+            // Pasamos fecha y hora juntas para mostrar bonito
             intent.putExtra("FECHA", fechaSeleccionada + " " + horario.getHoraSalida());
-            // ---------------------------
 
             startActivity(intent);
         });

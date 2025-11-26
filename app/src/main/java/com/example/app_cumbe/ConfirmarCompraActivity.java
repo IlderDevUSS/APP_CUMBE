@@ -29,7 +29,7 @@ public class ConfirmarCompraActivity extends AppCompatActivity {
     private String rutaStr = "";
     private String fechaStr = "";
 
-    // Datos del usuario (Dueño de la cuenta)
+    private String servicioBus = "";
     private String misNombres, misApellidos, miDni, miCelular;
 
     @Override
@@ -37,7 +37,9 @@ public class ConfirmarCompraActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityConfirmarCompraBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        Intent i = getIntent();
+        servicioBus = i.getStringExtra("SERVICIO");
+        if (servicioBus == null) servicioBus = "Estándar";
         recibirDatosIntent();
         cargarDatosUsuarioSesion();
         setupUI();
@@ -182,16 +184,16 @@ public class ConfirmarCompraActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseCompra> call, Response<ResponseCompra> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    // Éxito
                     Intent intent = new Intent(ConfirmarCompraActivity.this, TicketActivity.class);
-
-                    // Asegúrate de pasar estos datos exactos
                     intent.putExtra("PASAJE_ID", response.body().getPasajeId());
                     intent.putExtra("TRANSACCION_ID", response.body().getTransaccionId());
-                    intent.putExtra("RUTA", rutaStr != null ? rutaStr : "Ruta"); // Protección extra
-                    intent.putExtra("FECHA", fechaStr != null ? fechaStr : "Fecha"); // Protección extra
+                    intent.putExtra("RUTA", rutaStr);
+                    intent.putExtra("FECHA", fechaStr);
                     intent.putExtra("ASIENTO", asiento);
-
+                    intent.putExtra("PRECIO", precio);
+                    intent.putExtra("PASAJERO_NOMBRE", nom+ " " + ape);
+                    intent.putExtra("PASAJERO_DNI", dni);
+                    intent.putExtra("SERVICIO", servicioBus);
                     startActivity(intent);
                     finish();
                 } else {

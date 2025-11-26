@@ -13,6 +13,7 @@ import com.example.app_cumbe.model.ResponseLogin;
 import com.example.app_cumbe.model.ResponseProximoViaje;
 import com.example.app_cumbe.model.Encomienda;
 import com.example.app_cumbe.model.RequestUpdateProfile;
+import com.example.app_cumbe.model.Ticket;
 
 import java.util.List;
 
@@ -69,5 +70,8 @@ public interface ApiService {
             @Header("Authorization") String token,
             @Body RequestCompra request
     );
+
+    @GET("api/pasajes/historial")
+    Call<List<Ticket>> getHistorialPasajes(@Header("Authorization") String token);
 
 }

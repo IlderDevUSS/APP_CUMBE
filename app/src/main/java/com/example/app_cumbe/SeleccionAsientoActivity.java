@@ -39,8 +39,7 @@ public class SeleccionAsientoActivity extends AppCompatActivity {
     private int horarioId = 0;
     private int totalAsientos = 40; // Valor por defecto
     private int numPisos = 2;       // Valor por defecto
-
-    // --- NUEVAS VARIABLES NECESARIAS PARA EL FLUJO DE COMPRA ---
+    private String servicioBus = "";
     private double precioViaje = 0.0;
     private String rutaViaje = "";
     private String fechaViaje = "";
@@ -61,7 +60,8 @@ public class SeleccionAsientoActivity extends AppCompatActivity {
 
             int totalIntent = getIntent().getIntExtra("TOTAL_ASIENTOS", 0);
             int pisosIntent = getIntent().getIntExtra("NUM_PISOS", 0);
-
+            servicioBus = getIntent().getStringExtra("SERVICIO");
+            if (servicioBus == null) servicioBus = "Estándar";
             if (totalIntent > 0) totalAsientos = totalIntent;
             if (pisosIntent > 0) numPisos = pisosIntent;
 
@@ -237,12 +237,10 @@ public class SeleccionAsientoActivity extends AppCompatActivity {
         binding.btnConfirmarAsiento.setOnClickListener(v -> {
             Intent intent = new Intent(SeleccionAsientoActivity.this, ConfirmarCompraActivity.class);
 
-            // Datos técnicos para la API
             intent.putExtra("HORARIO_ID", horarioId);
             intent.putExtra("ASIENTO", numeroAsientoSeleccionado);
             intent.putExtra("PISO", asientoSeleccionado.getPiso());
-
-            // Datos visuales y de cobro
+            intent.putExtra("SERVICIO", servicioBus);
             intent.putExtra("PRECIO", precioViaje);
             intent.putExtra("RUTA", rutaViaje);
             intent.putExtra("FECHA", fechaViaje);
