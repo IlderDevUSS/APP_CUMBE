@@ -97,7 +97,7 @@ public interface ApiService {
             @Field("bus_id") int busId,
             @Field("tipo_reporte") String tipo,
             @Field("descripcion") String descripcion,
-            @Field("reportado_por_conductor_id") int conductorId,
+            @Field("conductor_id") int conductorId,
             @Field("costo_estimado") double costoEstimado // <--- AÑADIDO
     );
 }

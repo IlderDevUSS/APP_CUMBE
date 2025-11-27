@@ -147,18 +147,11 @@ public class DetalleRutaActivity extends AppCompatActivity {
     }
 
     private void enviarReporteApi(String tipo, String descripcion, double costo) {
+        // 1. Obtenemos el ID EXCLUSIVAMENTE de la ruta cargada
         int conductorId = ruta.getConductorId();
-        // Fallback por si acaso el ID no viene en la ruta
-        if (conductorId <= 0) conductorId = prefs.getInt("USER_ID", 0);
 
-        if (ruta.getBusId() <= 0) {
-            Toast.makeText(this, "Error: ID de Bus inválido", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        String descripcionFinal = descripcion;
         if (conductorId <= 0) {
-            Toast.makeText(this, "Error: No se pudo identificar al conductor. Cierra sesión y vuelve a entrar.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Error: No se ha cargado la información del conductor en esta ruta.", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -166,20 +159,29 @@ public class DetalleRutaActivity extends AppCompatActivity {
             Toast.makeText(this, "Error: ID de Bus inválido", Toast.LENGTH_SHORT).show();
             return;
         }
-        Call<Void> call = apiService.crearReporteBus(ruta.getBusId(), tipo, descripcionFinal, conductorId, costo);
+
+        // 3. Llamamos al servicio.
+        // Asegúrate de que el ApiService use el nombre de campo correcto ("conductor_id")
+        Call<Void> call = apiService.crearReporteBus(
+                ruta.getBusId(),
+                tipo,
+                descripcion,
+                conductorId, // Enviamos el ID correcto (ej. 2)
+                costo
+        );
+
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(DetalleRutaActivity.this, "Reporte registrado correctamente", Toast.LENGTH_LONG).show();
-
                     ruta.setTieneReporte(true);
                     actualizarBotonReporte();
-
                 } else {
                     Toast.makeText(DetalleRutaActivity.this, "Error servidor: " + response.code(), Toast.LENGTH_SHORT).show();
                 }
             }
+
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 Toast.makeText(DetalleRutaActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
