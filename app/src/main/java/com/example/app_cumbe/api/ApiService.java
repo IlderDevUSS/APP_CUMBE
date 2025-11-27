@@ -13,12 +13,15 @@ import com.example.app_cumbe.model.ResponseLogin;
 import com.example.app_cumbe.model.ResponseProximoViaje;
 import com.example.app_cumbe.model.Encomienda;
 import com.example.app_cumbe.model.RequestUpdateProfile;
+import com.example.app_cumbe.model.RutaConductor;
 import com.example.app_cumbe.model.Ticket;
 
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -74,4 +77,26 @@ public interface ApiService {
     @GET("api/pasajes/historial")
     Call<List<Ticket>> getHistorialPasajes(@Header("Authorization") String token);
 
+    // Dentro de ApiService interface
+// Obtener la ruta asignada actual (o próxima) del conductor
+    @GET("conductor/ruta_actual")
+    Call<RutaConductor> getRutaActualConductor(@Query("dni") String dni);
+
+    // Actualizar estado del horario (ej: de PROGRAMADO a EN_RUTA)
+    @FormUrlEncoded
+    @POST("conductor/actualizar_estado")
+    Call<Void> actualizarEstadoRuta(
+            @Field("horario_id") int horarioId,
+            @Field("nuevo_estado") String nuevoEstado
+    );
+
+    // Crear reporte de bus
+    @FormUrlEncoded
+    @POST("conductor/crear_reporte")
+    Call<Void> crearReporteBus(
+            @Field("bus_id") int busId, // Necesitarás pasar el bus_id en el modelo RutaConductor también
+            @Field("tipo_reporte") String tipo,
+            @Field("descripcion") String descripcion,
+            @Field("conductor_id") int conductorId
+    );
 }

@@ -21,7 +21,8 @@
     <color name="color_text_secondary">#6B7280</color>
     <color name="color_accent_bg_light">#FFF7ED</color>
     <color name="color_divider">#E5E7EB</color>
-
+    <color name="cumbe_brown">#644136</color>
+    <color name="colorPrimary">#FF5722</color>
     <!-- Gradiente moderno -->
     <color name="gradient_start">#ec7656</color>
     <color name="gradient_end">#FF8A65</color>

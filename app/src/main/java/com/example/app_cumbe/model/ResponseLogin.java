@@ -1,5 +1,7 @@
 package com.example.app_cumbe.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class ResponseLogin {
     private String access_token;
     private String nombre;
@@ -8,6 +10,10 @@ public class ResponseLogin {
     private String refresh_token;
     private String telefono;
     private String fecha_nacimiento;
+
+    private String tipo_usuario;
+
+    // Constructor, getters, etc.
 
     public String getAccess_token() { return access_token; }
     public String getNombre() { return nombre; }
@@ -18,4 +24,6 @@ public class ResponseLogin {
     public String getFecha_nacimiento() { return fecha_nacimiento; }
 
     public String getRefresh_token() { return refresh_token; }
+
+    public String getTipo_usuario() { return tipo_usuario; }
 }

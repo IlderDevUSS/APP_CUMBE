@@ -1,71 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:background="#F4F6F9">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#F4F6F9">
+        android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:id="@+id/headerHome"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_gradiant_nav"
-            android:padding="20dp"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/ivProfileIcon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_account_circle"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/white" />
+            android:layout_height="176dp"
+            android:background="#F4F6F9"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="20dp">
 
             <LinearLayout
-                android:id="@+id/llWelcomeText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/ivProfileIcon"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_weight="1"
+                android:orientation="vertical">
+
                 <TextView
+                    android:id="@+id/tvWelcomeName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Hola de nuevo,"
-                    android:textColor="@color/white"
-                    android:textSize="14sp"
-                    android:alpha="0.9"/>
-                <TextView
-                    android:id="@+id/tvUserName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="Usuario"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
+                    android:textColor="@color/color_principal_cumbe"
+                    android:textSize="35sp"
                     android:textStyle="bold"
-                    android:maxLines="1"
-                    android:ellipsize="end" />
+                    tools:text="Hola, Ilder" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="¿Con ganas de viajar hoy?"
+                    android:textColor="#644136"
+                    android:textSize="20sp" />
             </LinearLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ImageView
+                android:id="@+id/ivLogout"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:rotation="180"
+                android:src="@drawable/ic_arrow_back"
+                app:tint="#644136" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutDriverMode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical|end"
+            android:paddingHorizontal="20dp"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/tvModeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Modo Cliente"
+                android:textColor="#644136"
+                android:textStyle="bold"
+                android:layout_marginEnd="10dp"/>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/switchDriverMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:thumbTint="@color/white"
+                app:trackTint="@color/color_principal_cumbe"/>
+        </LinearLayout>
+
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vpPromos"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="10dp"/>
+
 
         <LinearLayout
             android:id="@+id/mainContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp"
-            app:layout_constraintTop_toBottomOf="@id/headerHome">
+            android:padding="20dp">
+
             <TextView
                 android:id="@+id/tvNextTripTitle"
                 android:layout_width="wrap_content"
@@ -74,7 +109,85 @@
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                 android:textColor="@color/black"
                 android:layout_marginBottom="8dp"/>
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardDriverRoute"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="8dp"
+                app:cardCornerRadius="15dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="#FFF3E0"
+                android:layout_marginBottom="20dp">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="RUTA ASIGNADA ACTUAL"
+                        android:textColor="#E65100"
+                        android:textStyle="bold"
+                        android:textSize="12sp"
+                        android:layout_marginBottom="8dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/tvDriverOrigin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Origen"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"/>
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_arrow_forward"
+                            app:tint="@color/black"
+                            android:layout_marginHorizontal="10dp"/>
+
+                        <TextView
+                            android:id="@+id/tvDriverDest"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Destino"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvDriverStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ESTADO: PROGRAMADO"
+                        android:background="@drawable/bg_white_pill"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="4dp"
+                        android:textSize="12sp"
+                        android:layout_marginTop="10dp"
+                        android:textColor="#644136"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Toca para gestionar viaje y reportes"
+                        android:gravity="end"
+                        android:textSize="12sp"
+                        android:layout_marginTop="15dp"
+                        android:textStyle="italic"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardNextTrip"
                 android:layout_width="match_parent"
@@ -140,12 +253,9 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
-                    <include layout="@layout/item_trip_info_row"
-                        android:id="@+id/rowFecha" />
-                    <include layout="@layout/item_trip_info_row"
-                        android:id="@+id/rowHora" />
-                    <include layout="@layout/item_trip_info_row"
-                        android:id="@+id/rowPasajeros" />
+                    <include layout="@layout/item_trip_info_row" android:id="@+id/rowFecha" />
+                    <include layout="@layout/item_trip_info_row" android:id="@+id/rowHora" />
+                    <include layout="@layout/item_trip_info_row" android:id="@+id/rowPasajeros" />
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -234,8 +344,7 @@
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="21sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -252,27 +361,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp" />
-
             </LinearLayout>
+
         </LinearLayout>
 
         <View
             android:id="@+id/footerTopBorder"
             android:layout_width="match_parent"
             android:layout_height="10dp"
-            android:background="@color/color_principal_cumbe"
-            app:layout_constraintTop_toBottomOf="@id/mainContent"
-            app:layout_constraintBottom_toTopOf="@id/footerView" />
+            android:background="@color/color_principal_cumbe"/>
 
         <View
             android:id="@+id/footerView"
             android:layout_width="match_parent"
             android:layout_height="155dp"
-            android:background="@drawable/bus_3"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/mainContent"
-            app:layout_constraintVertical_bias="1.0"
-            tools:layout_editor_absoluteX="0dp" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:background="@drawable/bus_3"/>
+    </LinearLayout>
 </androidx.core.widget.NestedScrollView>

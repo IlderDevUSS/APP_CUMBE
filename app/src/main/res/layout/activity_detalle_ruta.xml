@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="#F4F6F9">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gestión de Ruta"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginBottom="20dp"/>
+
+    <TextView
+        android:id="@+id/tvDetalleRutaTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Origen - Destino"
+        android:textSize="18sp"
+        android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:id="@+id/tvDetallePasajeros"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pasajeros: 0"
+        android:layout_marginBottom="20dp"/>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Control de Viaje"
+                android:textStyle="bold"/>
+
+            <Button
+                android:id="@+id/btnIniciarViaje"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Iniciar Viaje (En Ruta)"
+                android:backgroundTint="#4CAF50"
+                android:layout_marginTop="10dp"/>
+
+            <Button
+                android:id="@+id/btnFinalizarViaje"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Finalizar Viaje"
+                android:backgroundTint="#F44336"
+                android:layout_marginTop="5dp"
+                android:enabled="false"/> </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Incidencias"
+                android:textStyle="bold"/>
+
+            <Button
+                android:id="@+id/btnCrearReporte"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Crear Reporte / Incidencia"
+                android:backgroundTint="#FF9800"
+                android:layout_marginTop="10dp"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>
