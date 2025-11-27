@@ -52,6 +52,8 @@ public class DetalleRutaActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle("Gestión de Ruta");
+            // Establecer explícitamente el icono de navegación
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         }
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
@@ -154,12 +156,16 @@ public class DetalleRutaActivity extends AppCompatActivity {
             return;
         }
 
-        // Concatenamos el costo a la descripción si no has modificado el backend para recibirlo aparte
         String descripcionFinal = descripcion;
-        if (costo > 0) {
-            descripcionFinal += " [Costo Estimado: S/." + costo + "]";
+        if (conductorId <= 0) {
+            Toast.makeText(this, "Error: No se pudo identificar al conductor. Cierra sesión y vuelve a entrar.", Toast.LENGTH_LONG).show();
+            return;
         }
 
+        if (ruta.getBusId() <= 0) {
+            Toast.makeText(this, "Error: ID de Bus inválido", Toast.LENGTH_SHORT).show();
+            return;
+        }
         Call<Void> call = apiService.crearReporteBus(ruta.getBusId(), tipo, descripcionFinal, conductorId, costo);
         call.enqueue(new Callback<Void>() {
             @Override
@@ -167,7 +173,6 @@ public class DetalleRutaActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     Toast.makeText(DetalleRutaActivity.this, "Reporte registrado correctamente", Toast.LENGTH_LONG).show();
 
-                    // Actualizar estado local y bloquear botón para evitar duplicados
                     ruta.setTieneReporte(true);
                     actualizarBotonReporte();
 
