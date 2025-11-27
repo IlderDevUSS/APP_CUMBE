@@ -90,13 +90,14 @@ public interface ApiService {
             @Field("nuevo_estado") String nuevoEstado
     );
 
-    // Crear reporte de bus
+
     @FormUrlEncoded
     @POST("conductor/crear_reporte")
     Call<Void> crearReporteBus(
-            @Field("bus_id") int busId, // Necesitarás pasar el bus_id en el modelo RutaConductor también
+            @Field("bus_id") int busId,
             @Field("tipo_reporte") String tipo,
             @Field("descripcion") String descripcion,
-            @Field("conductor_id") int conductorId
+            @Field("conductor_id") int conductorId,
+            @Field("costo_estimado") double costoEstimado // <--- AÑADIDO
     );
 }

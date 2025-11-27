@@ -7,7 +7,7 @@ public class RutaConductor implements Serializable {
     @SerializedName("horario_id")
     private int horarioId;
 
-    @SerializedName("ruta_origen") // Asumo que el backend devuelve nombres
+    @SerializedName("ruta_origen")
     private String origen;
 
     @SerializedName("ruta_destino")
@@ -20,22 +20,25 @@ public class RutaConductor implements Serializable {
     private String horaSalida;
 
     @SerializedName("estado")
-    private String estado; // "PROGRAMADO", "EN_RUTA", "FINALIZADO"
+    private String estado;
 
     @SerializedName("asientos_ocupados")
     private int cantidadPasajeros;
 
     @SerializedName("placa_bus")
     private String placaBus;
+
     @SerializedName("bus_id")
     private int busId;
 
     @SerializedName("conductor_id")
     private int conductorId;
 
-    public int getConductorId() { return conductorId; }
+    // NUEVO CAMPO
+    @SerializedName("tiene_reporte")
+    private boolean tieneReporte;
 
-    public int getBusId() { return busId; }
+    // Getters
     public int getHorarioId() { return horarioId; }
     public String getOrigen() { return origen; }
     public String getDestino() { return destino; }
@@ -44,12 +47,10 @@ public class RutaConductor implements Serializable {
     public String getEstado() { return estado; }
     public int getCantidadPasajeros() { return cantidadPasajeros; }
     public String getPlacaBus() { return placaBus; }
+    public int getBusId() { return busId; }
+    public int getConductorId() { return conductorId; }
+    public boolean tieneReporte() { return tieneReporte; }
 
-    //SET estado
-    public void setEstado(String nuevoEstado) {
-        this.estado = nuevoEstado;
-    }
-
-
-//
+    public void setEstado(String estado) { this.estado = estado; }
+    public void setTieneReporte(boolean tieneReporte) { this.tieneReporte = tieneReporte; }
 }

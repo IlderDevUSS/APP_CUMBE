@@ -1,5 +1,9 @@
 package com.example.app_cumbe;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,10 +13,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
+import com.example.app_cumbe.api.ApiClient; // Importante
 import com.example.app_cumbe.databinding.ActivityHomeBinding;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -22,15 +23,17 @@ public class HomeActivity extends AppCompatActivity {
 
     private ActivityHomeBinding binding;
 
+    // Instancias de los fragmentos
     private final Fragment homeFragment = new HomeFragment();
     private final Fragment ticketsFragment = new TicketsFragment();
     private final Fragment servicesFragment = new ServicesFragment();
     private final Fragment profileFragment = new ProfileFragment();
+    // [CORRECCIÓN 1] Instanciamos el fragmento de conductor aquí
+    private final Fragment driverRoutesFragment = new DriverRoutesFragment();
 
-    // --- VARIABLES PARA EL TIMEOUT ---
     private Handler handler;
     private Runnable logoutRunnable;
-    private static final long TIEMPO_INACTIVIDAD = 7 * 60 * 1000; // 7 minutos
+    private static final long TIEMPO_INACTIVIDAD = 7 * 60 * 1000;
     private long lastInteractionTime;
 
     @Override
@@ -38,6 +41,9 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // [CORRECCIÓN 2] Inicializar ApiClient por seguridad si la app se restaura aquí
+        ApiClient.init(this);
 
         lastInteractionTime = System.currentTimeMillis();
         initInactivityTimer();
@@ -54,21 +60,18 @@ public class HomeActivity extends AppCompatActivity {
                     return true;
                 } else if (itemId == R.id.navigation_tickets) {
 
-                    // --- LÓGICA DE NAVEGACIÓN CONDICIONAL ---
+                    // Verificamos el modo conductor
                     SharedPreferences prefs = getSharedPreferences(SP_NAME, MODE_PRIVATE);
                     boolean esConductorActivo = prefs.getBoolean("MODO_CONDUCTOR_ACTIVO", false);
 
                     if (esConductorActivo) {
-                        // Navegar a la nueva Activity de Historial de Conductor
-                        Intent intent = new Intent(HomeActivity.this, DriverRoutesFragment.class);
-                        startActivity(intent);
-                        // Retornamos false para no seleccionar el item en el bottom nav ya que cambiamos de actividad
-                        return false;
+                        // [CORRECCIÓN PRINCIPAL] Usar loadFragment, NO startActivity
+                        loadFragment(driverRoutesFragment);
                     } else {
-                        // Modo Cliente: Historial de Pasajes
+                        // Modo Cliente
                         loadFragment(ticketsFragment);
-                        return true;
                     }
+                    return true; // Retornamos true para que el icono se marque como seleccionado
 
                 } else if (itemId == R.id.navigation_services) {
                     loadFragment(servicesFragment);
@@ -81,6 +84,8 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
     private void initInactivityTimer() {
         handler = new Handler(Looper.getMainLooper());
