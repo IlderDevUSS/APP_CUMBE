@@ -15,15 +15,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView; // Necesario para el adaptador interno
-import androidx.viewpager2.widget.ViewPager2;   // Necesario para el carrusel
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.app_cumbe.api.ApiClient;
 import com.example.app_cumbe.api.ApiService;
 import com.example.app_cumbe.databinding.FragmentHomeBinding;
-import com.example.app_cumbe.databinding.ItemPromoBannerBinding; // Asegurate que creaste este XML
+import com.example.app_cumbe.databinding.ItemPromoBannerBinding;
 import com.example.app_cumbe.model.ResponseProximoViaje;
 import com.example.app_cumbe.model.RutaConductor;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,9 +37,10 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.example.app_cumbe.LoginActivity.SP_NAME;
 
 public class HomeFragment extends Fragment {
-    private RutaConductor rutaActualConductor;
+
     private FragmentHomeBinding binding;
     private SharedPreferences sharedPreferences;
+    private RutaConductor rutaActualConductor;
 
     @Nullable
     @Override
@@ -51,25 +53,35 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Inicializar Preferencias
         sharedPreferences = requireContext().getSharedPreferences(SP_NAME, MODE_PRIVATE);
 
-        // 1. Cargar Datos del Usuario (Header nuevo)
         setupHeader();
-
-        // 2. Configurar Switch de Conductor
         setupDriverSwitch();
-
-        // 3. Configurar Carrusel
         setupPromoCarousel();
 
-        // 4. Lógica original de Tarjetas (Manteniendo tu código)
+        // Lógica de tarjetas inferiores (Cliente)
         setNavCard(binding.cardComprarPasaje.getRoot(), R.drawable.ic_local_activity, "Comprar Pasaje", "Encuentra tu ruta y reserva tu asiento.", R.color.color_principal_cumbe);
         setNavCard(binding.cardSeguimiento.getRoot(), R.drawable.ic_track_changes, "Seguimiento de Encomienda", "Consulta el estado de tu envío.", R.color.color_estado_entregado);
 
-        // 5. Cargar API
+        // Carga inicial (Cliente por defecto o estado anterior)
         cargarProximoViaje();
         setupListeners();
+    }
+
+    private void setupHeader() {
+        String userName = sharedPreferences.getString("USER_NAME", "Viajero");
+        String primerNombre = userName.split(" ")[0];
+        binding.tvWelcomeName.setText("Hola, " + primerNombre);
+
+        binding.ivLogout.setOnClickListener(v -> {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.apply();
+
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        });
     }
 
     private void setupDriverSwitch() {
@@ -83,33 +95,59 @@ public class HomeFragment extends Fragment {
         }
 
         binding.switchDriverMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            // Referencia al BottomNav para cambiar el icono
+            BottomNavigationView bottomNav = requireActivity().findViewById(R.id.bottom_navigation);
+
             if (isChecked) {
-                // MODO CONDUCTOR ACTIVO
+                // --- MODO CONDUCTOR ACTIVO ---
                 binding.tvModeLabel.setText("Modo Conductor");
+                binding.tvNextTripTitle.setText("Tus Rutas Asignadas");
 
                 // 1. Ocultar interfaz Cliente
                 binding.cardNextTrip.setVisibility(View.GONE);
                 binding.cardNoNextTrip.setVisibility(View.GONE);
-                binding.tvNextTripTitle.setText("Tus Rutas Asignadas");
 
-                // 2. Mostrar interfaz Conductor
+                // 2. Cambiar icono del BottomNav a BUS (Conductor)
+                if (bottomNav != null) {
+                    // Asegúrate de tener un icono ic_directions_bus o similar
+                    bottomNav.getMenu().findItem(R.id.navigation_tickets).setIcon(R.drawable.ic_directions_bus);
+                    bottomNav.getMenu().findItem(R.id.navigation_tickets).setTitle("Mis Rutas");
+                }
+
+                // Guardar estado en preferencias para HomeActivity
+                sharedPreferences.edit().putBoolean("MODO_CONDUCTOR_ACTIVO", true).apply();
+
+                // 3. Cargar datos Conductor
                 cargarRutaConductor(conductorDni);
 
             } else {
-                // MODO CLIENTE ACTIVO
+                // --- MODO CLIENTE ACTIVO ---
                 binding.tvModeLabel.setText("Modo Cliente");
                 binding.tvNextTripTitle.setText("Tu Próximo Viaje");
-                binding.cardDriverRoute.setVisibility(View.GONE);
 
-                // Cargar datos normales
+                // 1. Ocultar interfaz Conductor (AMBAS TARJETAS)
+                binding.cardDriverRoute.setVisibility(View.GONE);
+                binding.cardDriverNoRoute.setVisibility(View.GONE); // <--- ESTA ES LA CORRECCIÓN CLAVE
+
+                // 2. Restaurar icono BottomNav a TICKET (Cliente)
+                if (bottomNav != null) {
+                    bottomNav.getMenu().findItem(R.id.navigation_tickets).setIcon(R.drawable.ic_history);
+                    bottomNav.getMenu().findItem(R.id.navigation_tickets).setTitle("Mis Tickets");
+                }
+
+                // Guardar estado en preferencias
+                sharedPreferences.edit().putBoolean("MODO_CONDUCTOR_ACTIVO", false).apply();
+
+                // 3. Cargar datos Cliente
                 cargarProximoViaje();
             }
         });
     }
 
     private void cargarRutaConductor(String dni) {
+        if (dni == null || dni.trim().isEmpty()) return;
+
         ApiService apiService = ApiClient.getApiService();
-        // Asumiendo que existe este endpoint en tu backend
         Call<RutaConductor> call = apiService.getRutaActualConductor(dni);
 
         call.enqueue(new Callback<RutaConductor>() {
@@ -119,13 +157,20 @@ public class HomeFragment extends Fragment {
 
                 if (response.isSuccessful() && response.body() != null) {
                     rutaActualConductor = response.body();
+                    mostrarTarjetaConductor(true);
 
-                    binding.cardDriverRoute.setVisibility(View.VISIBLE);
                     binding.tvDriverOrigin.setText(rutaActualConductor.getOrigen());
                     binding.tvDriverDest.setText(rutaActualConductor.getDestino());
-                    binding.tvDriverStatus.setText("ESTADO: " + rutaActualConductor.getEstado());
 
-                    // Click para ir al detalle
+                    // CORRECCIÓN 1: Formateo de Estado (Quitar guión bajo y mayúsculas bonitas)
+                    String estadoRaw = rutaActualConductor.getEstado();
+                    String estadoLimpio = estadoRaw.replace("_", " ");
+                    binding.tvDriverStatus.setText("ESTADO: " + estadoLimpio);
+
+                    // CORRECCIÓN 2: Mostrar Pasajeros
+                    String info = rutaActualConductor.getFechaSalida() + " - " + rutaActualConductor.getHoraSalida();
+                    String infoPasajeros = "\nPasajeros: " + rutaActualConductor.getCantidadPasajeros();
+                    binding.tvDriverDateInfo.setText(info + infoPasajeros);
                     binding.cardDriverRoute.setOnClickListener(v -> {
                         Intent intent = new Intent(requireContext(), DetalleRutaActivity.class);
                         intent.putExtra("RUTA_DATA", rutaActualConductor);
@@ -133,76 +178,56 @@ public class HomeFragment extends Fragment {
                     });
 
                 } else {
-                    // Si no hay ruta asignada, mostrar mensaje o tarjeta vacía
-                    Toast.makeText(getContext(), "No tienes rutas asignadas hoy", Toast.LENGTH_SHORT).show();
+                    mostrarTarjetaConductor(false);
                 }
             }
 
             @Override
             public void onFailure(Call<RutaConductor> call, Throwable t) {
-                Toast.makeText(getContext(), "Error cargando rutas", Toast.LENGTH_SHORT).show();
+                mostrarTarjetaConductor(false);
             }
         });
     }
 
-    private void setupHeader() {
-        // Obtenemos nombre guardado
-        String userName = sharedPreferences.getString("USER_NAME", "Viajero");
-        // Extraemos solo el primer nombre para el saludo "Hola, Juan"
-        String primerNombre = userName.split(" ")[0];
-        binding.tvWelcomeName.setText("Hola, " + primerNombre);
+    private void mostrarTarjetaConductor(boolean tieneRuta) {
+        // Solo mostramos si el switch sigue activo
+        if (!binding.switchDriverMode.isChecked()) return;
 
-        // Listener para cerrar sesión
-        binding.ivLogout.setOnClickListener(v -> {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.clear(); // Borra token y datos
-            editor.apply();
-
-            Intent intent = new Intent(getActivity(), LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-        });
+        if (tieneRuta) {
+            binding.cardDriverRoute.setVisibility(View.VISIBLE);
+            binding.cardDriverNoRoute.setVisibility(View.GONE);
+        } else {
+            binding.cardDriverRoute.setVisibility(View.GONE);
+            binding.cardDriverNoRoute.setVisibility(View.VISIBLE);
+        }
     }
-
-
-    private void setupPromoCarousel() {
-        // Lista de imágenes para el carrusel (asegurate que existan en drawable)
-        List<Integer> promoImages = Arrays.asList(
-                R.drawable.bus_1,
-                R.drawable.bus_2,
-                R.drawable.bus_3
-        );
-        PromoAdapter adapter = new PromoAdapter(promoImages);
-        binding.vpPromos.setAdapter(adapter);
-    }
-
-    // --- MÉTODOS ORIGINALES TUYOS (Intactos) ---
 
     @Override
     public void onResume() {
         super.onResume();
-        // Recargar datos al volver
-        setupHeader(); // Reutilizamos setupHeader en lugar de loadData parcial
+        setupHeader();
+        // Si volvemos y está activo el modo conductor, recargamos su ruta
+        if (binding.switchDriverMode.isChecked()) {
+            String conductorDni = sharedPreferences.getString("USER_DNI", "");
+            cargarRutaConductor(conductorDni);
+        } else {
+            cargarProximoViaje();
+        }
     }
 
     private void cargarProximoViaje() {
         if (getContext() == null) return;
-
         String userToken = sharedPreferences.getString("USER_TOKEN", null);
-
         if (userToken == null) {
             mostrarTarjetaGris(true);
             return;
         }
-
         ApiService apiService = ApiClient.getApiService();
         Call<ResponseProximoViaje> call = apiService.getProximoViaje(userToken);
-
         call.enqueue(new Callback<ResponseProximoViaje>() {
             @Override
             public void onResponse(Call<ResponseProximoViaje> call, Response<ResponseProximoViaje> response) {
                 if (!isAdded() || binding == null) return;
-
                 if (response.isSuccessful() && response.body() != null) {
                     ResponseProximoViaje viaje = response.body();
                     mostrarTarjetaGris(false);
@@ -215,7 +240,6 @@ public class HomeFragment extends Fragment {
                     mostrarTarjetaGris(true);
                 }
             }
-
             @Override
             public void onFailure(Call<ResponseProximoViaje> call, Throwable t) {
                 if (!isAdded() || binding == null) return;
@@ -226,6 +250,9 @@ public class HomeFragment extends Fragment {
 
     private void mostrarTarjetaGris(boolean mostrarGris) {
         if (binding == null) return;
+        // Solo actuar si NO estamos en modo conductor
+        if (binding.switchDriverMode.isChecked()) return;
+
         if (mostrarGris) {
             binding.tvNextTripTitle.setVisibility(View.GONE);
             binding.cardNextTrip.setVisibility(View.GONE);
@@ -252,7 +279,6 @@ public class HomeFragment extends Fragment {
         ImageView ivIcon = cardView.findViewById(R.id.ivCardIcon);
         TextView tvTitle = cardView.findViewById(R.id.tvCardTitle);
         TextView tvDescription = cardView.findViewById(R.id.tvCardDescription);
-
         ivIcon.setImageResource(iconResId);
         tvTitle.setText(title);
         tvDescription.setText(description);
@@ -266,39 +292,30 @@ public class HomeFragment extends Fragment {
         tvValue.setText(value);
     }
 
-    // --- ADAPTER INTERNO PARA CARRUSEL ---
+    private void setupPromoCarousel() {
+        List<Integer> promoImages = Arrays.asList(
+                R.drawable.bus_1,
+                R.drawable.bus_2,
+                R.drawable.bus_3
+        );
+        PromoAdapter adapter = new PromoAdapter(promoImages);
+        binding.vpPromos.setAdapter(adapter);
+    }
+
     class PromoAdapter extends RecyclerView.Adapter<PromoAdapter.PromoViewHolder> {
         private final List<Integer> images;
-
-        public PromoAdapter(List<Integer> images) {
-            this.images = images;
-        }
-
-        @NonNull
-        @Override
-        public PromoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            // Asegurate de haber creado item_promo_banner.xml como te indiqué antes
-            ItemPromoBannerBinding itemBinding = ItemPromoBannerBinding.inflate(
-                    LayoutInflater.from(parent.getContext()), parent, false);
+        public PromoAdapter(List<Integer> images) { this.images = images; }
+        @NonNull @Override public PromoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            ItemPromoBannerBinding itemBinding = ItemPromoBannerBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
             return new PromoViewHolder(itemBinding);
         }
-
-        @Override
-        public void onBindViewHolder(@NonNull PromoViewHolder holder, int position) {
+        @Override public void onBindViewHolder(@NonNull PromoViewHolder holder, int position) {
             holder.binding.ivPromoImage.setImageResource(images.get(position));
         }
-
-        @Override
-        public int getItemCount() {
-            return images.size();
-        }
-
+        @Override public int getItemCount() { return images.size(); }
         class PromoViewHolder extends RecyclerView.ViewHolder {
             ItemPromoBannerBinding binding;
-            public PromoViewHolder(ItemPromoBannerBinding binding) {
-                super(binding.getRoot());
-                this.binding = binding;
-            }
+            public PromoViewHolder(ItemPromoBannerBinding binding) { super(binding.getRoot()); this.binding = binding; }
         }
     }
 }

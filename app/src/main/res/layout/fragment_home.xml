@@ -77,12 +77,18 @@
                 android:textStyle="bold"
                 android:layout_marginEnd="10dp"/>
 
-            <com.google.android.material.materialswitch.MaterialSwitch
+            <!-- CAMBIO IMPORTANTE: Usar SwitchCompat estándar para evitar crash de texto nulo -->
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switchDriverMode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textOff=""
+                android:textOn=""
+                android:text=""
+                app:showText="false"
                 app:thumbTint="@color/white"
                 app:trackTint="@color/color_principal_cumbe"/>
+
         </LinearLayout>
 
 
@@ -109,6 +115,7 @@
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                 android:textColor="@color/black"
                 android:layout_marginBottom="8dp"/>
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardDriverRoute"
                 android:layout_width="match_parent"
@@ -116,20 +123,20 @@
                 app:cardElevation="8dp"
                 app:cardCornerRadius="15dp"
                 android:visibility="gone"
-                app:cardBackgroundColor="#FFF3E0"
                 android:layout_marginBottom="20dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:background="@drawable/bg_gradient_driver_trip"
                     android:padding="20dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="RUTA ASIGNADA ACTUAL"
-                        android:textColor="#E65100"
+                        android:textColor="#E8F5E9"
                         android:textStyle="bold"
                         android:textSize="12sp"
                         android:layout_marginBottom="8dp"/>
@@ -144,28 +151,46 @@
                             android:id="@+id/tvDriverOrigin"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Origen"
-                            android:textSize="18sp"
+                            tools:text="Chiclayo"
+                            android:textSize="20sp"
                             android:textStyle="bold"
-                            android:textColor="@color/black"/>
+                            android:textColor="@color/white"/>
 
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_arrow_forward"
-                            app:tint="@color/black"
-                            android:layout_marginHorizontal="10dp"/>
+                            app:tint="@color/white"
+                            android:layout_marginHorizontal="15dp"/>
 
                         <TextView
                             android:id="@+id/tvDriverDest"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Destino"
-                            android:textSize="18sp"
+                            tools:text="Trujillo"
+                            android:textSize="20sp"
                             android:textStyle="bold"
-                            android:textColor="@color/black"/>
+                            android:textColor="@color/white"/>
                     </LinearLayout>
 
+                    <!-- Detalles extra útiles para el conductor -->
+                    <TextView
+                        android:id="@+id/tvDriverDateInfo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="Hoy - 14:30 PM"
+                        android:textColor="#E8F5E9"
+                        android:textSize="14sp"
+                        android:layout_marginTop="4dp"/>
+                    <TextView
+                        android:id="@+id/tvDriverDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="RUTA ASIGNADA ACTUAL"
+                        android:textColor="#E8F5E9"
+                        android:textStyle="bold"
+                        android:textSize="12sp"
+                        android:layout_marginBottom="8dp"/>
                     <TextView
                         android:id="@+id/tvDriverStatus"
                         android:layout_width="wrap_content"
@@ -175,19 +200,66 @@
                         android:paddingHorizontal="12dp"
                         android:paddingVertical="4dp"
                         android:textSize="12sp"
-                        android:layout_marginTop="10dp"
-                        android:textColor="#644136"/>
+                        android:textStyle="bold"
+                        android:layout_marginTop="15dp"
+                        android:textColor="#2E7D32"/> <!-- Texto verde oscuro para contraste -->
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Toca para gestionar viaje y reportes"
+                        android:text="Toca para gestionar viaje"
                         android:gravity="end"
                         android:textSize="12sp"
-                        android:layout_marginTop="15dp"
+                        android:layout_marginTop="10dp"
+                        android:textColor="#E8F5E9"
                         android:textStyle="italic"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
+
+            <!-- 2. TARJETA CONDUCTOR: SIN RUTA (VACÍA) -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardDriverNoRoute"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="8dp"
+                app:cardCornerRadius="15dp"
+                android:visibility="gone"
+                android:layout_marginBottom="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/bg_gradient_no_next_trip"
+                    android:padding="30dp"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/ic_directions_bus"
+                        app:tint="@color/white"
+                        android:layout_marginBottom="10dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sin Asignaciones"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="No tienes rutas programadas pendientes por el momento."
+                        android:textColor="#E0E0E0"
+                        android:textSize="14sp"
+                        android:gravity="center"
+                        android:layout_marginTop="8dp"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardNextTrip"
                 android:layout_width="match_parent"

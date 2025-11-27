@@ -1,9 +1,5 @@
 package com.example.app_cumbe;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,6 +8,10 @@ import android.os.Looper;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.example.app_cumbe.databinding.ActivityHomeBinding;
 import com.google.android.material.navigation.NavigationBarView;
@@ -31,8 +31,6 @@ public class HomeActivity extends AppCompatActivity {
     private Handler handler;
     private Runnable logoutRunnable;
     private static final long TIEMPO_INACTIVIDAD = 7 * 60 * 1000; // 7 minutos
-
-    // Variable para guardar el momento de la última interacción
     private long lastInteractionTime;
 
     @Override
@@ -41,12 +39,8 @@ public class HomeActivity extends AppCompatActivity {
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Inicializamos la última interacción al momento de crear
         lastInteractionTime = System.currentTimeMillis();
         initInactivityTimer();
-
-        // No dependemos solo del Intent para cargar datos, el fragmento lo hará por sí mismo
-        // Pero si HomeActivity tuviera UI propia con nombre, aquí lo cargaríamos.
 
         loadFragment(homeFragment);
 
@@ -54,12 +48,28 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int itemId = item.getItemId();
+
                 if (itemId == R.id.navigation_home) {
                     loadFragment(homeFragment);
                     return true;
                 } else if (itemId == R.id.navigation_tickets) {
-                    loadFragment(ticketsFragment);
-                    return true;
+
+                    // --- LÓGICA DE NAVEGACIÓN CONDICIONAL ---
+                    SharedPreferences prefs = getSharedPreferences(SP_NAME, MODE_PRIVATE);
+                    boolean esConductorActivo = prefs.getBoolean("MODO_CONDUCTOR_ACTIVO", false);
+
+                    if (esConductorActivo) {
+                        // Navegar a la nueva Activity de Historial de Conductor
+                        Intent intent = new Intent(HomeActivity.this, DriverRoutesFragment.class);
+                        startActivity(intent);
+                        // Retornamos false para no seleccionar el item en el bottom nav ya que cambiamos de actividad
+                        return false;
+                    } else {
+                        // Modo Cliente: Historial de Pasajes
+                        loadFragment(ticketsFragment);
+                        return true;
+                    }
+
                 } else if (itemId == R.id.navigation_services) {
                     loadFragment(servicesFragment);
                     return true;
@@ -82,7 +92,6 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        // Cada vez que tocas, actualizamos la hora y reiniciamos el timer visual
         lastInteractionTime = System.currentTimeMillis();
         resetInactivityTimer();
         return super.dispatchTouchEvent(ev);
@@ -108,17 +117,13 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        // VERIFICACIÓN CRÍTICA AL VOLVER A LA APP
         long currentTime = System.currentTimeMillis();
         long tiempoTranscurrido = currentTime - lastInteractionTime;
 
         if (tiempoTranscurrido >= TIEMPO_INACTIVIDAD) {
-            // Si pasó más de 7 min desde que la usaste por última vez (incluso en background)
             Toast.makeText(this, "Tu sesión ha expirado por inactividad", Toast.LENGTH_LONG).show();
             cerrarSesion();
         } else {
-            // Si aún es válido, arrancamos el timer por el tiempo restante o reiniciamos
             startInactivityTimer();
         }
     }
@@ -127,18 +132,12 @@ public class HomeActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         stopInactivityTimer();
-        // No borramos lastInteractionTime aquí, para que persista en memoria mientras la app vive en background
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         stopInactivityTimer();
-
-        // Si el usuario está cerrando la actividad explícitamente (no rotación de pantalla)
-        if (isFinishing()) {
-            // Opcional: borrarDatosSesion(); si quieres logout al cerrar la app
-        }
     }
 
     public void cerrarSesion() {

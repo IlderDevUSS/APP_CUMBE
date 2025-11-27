@@ -150,7 +150,7 @@ public class LoginActivity extends AppCompatActivity {
         editor.putString("USER_EMAIL", response.getEmail());
         editor.putString("USER_PHONE", response.getTelefono());
         editor.putString("USER_BIRTH_DATE", response.getFecha_nacimiento());
-        //editor.putString("tipo_usuario", response.getTipo_usuario());
+        editor.putString("tipo_usuario", response.getTipo_usuario());
         // Guardamos el Refresh Token
         editor.putString("REFRESH_TOKEN", response.getRefresh_token());
         editor.apply();
