@@ -16,7 +16,7 @@
         <LinearLayout
             android:id="@+id/headerHome"
             android:layout_width="match_parent"
-            android:layout_height="176dp"
+            android:layout_height="137dp"
             android:background="#F4F6F9"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -35,7 +35,7 @@
                     android:textColor="@color/color_principal_cumbe"
                     android:textSize="35sp"
                     android:textStyle="bold"
-                    tools:text="Hola, Ilder" />
+                    tools:text="Hola, {nombre]" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -54,7 +54,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:rotation="180"
-                android:src="@drawable/ic_arrow_back"
+                android:src="@drawable/ic_exit"
                 app:tint="#644136" />
         </LinearLayout>
 

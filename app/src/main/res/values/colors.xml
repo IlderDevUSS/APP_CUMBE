@@ -27,6 +27,16 @@
     <color name="gradient_start">#ec7656</color>
     <color name="gradient_end">#FF8A65</color>
 
+
+    <color name="light_bg_start">#E0F7FA</color>
+    <color name="light_bg_end">#80DEEA</color>
+    <color name="dark_text_title">#222831</color>
+    <color name="dark_text_body">#455A64</color>
+    <color name="input_border">#B0BEC5</color>
+    <color name="input_icon">#78909C</color>
+    <color name="btn_grad_start">#00838F</color>
+    <color name="btn_grad_end">#00ACC1</color>
+
     <!-- Gradiente gris -->
     <color name="gradient_gray_start">#A9A9A9</color>
     <color name="gradient_gray_end">#808080</color>
