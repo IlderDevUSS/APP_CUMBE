@@ -21,7 +21,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/color_principal_cumbe"
+            android:background="@color/Textos_destacado"
             android:padding="12dp">
 
             <TextView
@@ -83,7 +83,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         tools:text="08:30 PM"
-                        android:textColor="@color/black"
+                        android:textColor="@color/Textos_normal"
                         android:textStyle="bold"
                         android:textSize="16sp"/>
 
@@ -92,7 +92,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         tools:text="Bus Cama"
-                        android:textColor="@color/gris1"
+                        android:textColor="@color/Textos_normal_second"
                         android:textSize="12sp"/>
                 </LinearLayout>
 
@@ -101,7 +101,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="S/ 45.00"
-                    android:textColor="@color/color_principal_cumbe"
+                    android:textColor="@color/Textos_destacado"
                     android:textStyle="bold"
                     android:textSize="16sp"/>
             </LinearLayout>
@@ -119,7 +119,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:text="Juan Perez Lopez"
-                android:textColor="@color/black"
+                android:textColor="@color/Textos_normal"
                 android:textSize="13sp"
                 android:textStyle="bold"/>
 
@@ -128,7 +128,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:text="DNI: 70554433"
-                android:textColor="@color/gris1"
+                android:textColor="@color/Textos_normal_second"
                 android:textSize="11sp"/>
 
         </LinearLayout>

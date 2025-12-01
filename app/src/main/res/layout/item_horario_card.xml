@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
+    android:background="@color/fondo_pantalla"
     app:cardCornerRadius="12dp"
     app:strokeWidth="1dp"
     app:strokeColor="#E0E0E0"
@@ -27,7 +28,7 @@
             tools:text="08:30 PM"
             android:textSize="22sp"
             android:textStyle="bold"
-            android:textColor="@color/black"
+            android:textColor="@color/Textos_normal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
@@ -39,7 +40,7 @@
             tools:text="S/ 45.00"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="@color/color_principal_cumbe"
+            android:textColor="@color/Textos_destacado"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
@@ -50,7 +51,7 @@
             android:layout_height="wrap_content"
             tools:text="Bus Cama (2 Pisos)"
             android:textSize="14sp"
-            android:textColor="@color/gris1"
+            android:textColor="@color/Textos_normal_second"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvHoraSalida"/>
 
@@ -81,7 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             tools:text="15 asientos disponibles"
-            android:textColor="#4CAF50"
+            android:textColor="@color/color_finalizado"
             android:textStyle="bold"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"

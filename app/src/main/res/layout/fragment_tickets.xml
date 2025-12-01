@@ -5,30 +5,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_surface_bg">
+    android:background="@color/fondo_pantalla">
 
     <TextView
         android:id="@+id/tvTitleTickets"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="85dp"
         android:text="Mis Viajes"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="@color/color_text_primary"
+        android:textColor="@color/Textos_normal_tercero"
+        android:textAlignment="center"
         android:padding="24dp"
-        android:background="@color/white"
+        android:background="@color/fondo_pantalla"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTicketsHistory"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:clipToPadding="false"
         android:paddingTop="8dp"
         android:paddingBottom="16dp"
-        android:clipToPadding="false"
-        app:layout_constraintTop_toBottomOf="@id/tvTitleTickets"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:listitem="@layout/item_ticket_history"/>
+        app:layout_constraintTop_toBottomOf="@id/tvTitleTickets"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="0dp"
+        tools:listitem="@layout/item_ticket_history" />
 
     <TextView
         android:id="@+id/tvEmptyTickets"

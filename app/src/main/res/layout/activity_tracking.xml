@@ -5,18 +5,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/fondo_pantalla"
     tools:context=".TrackingActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbarTracking"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/color_divider"
+        android:background="@color/fondo_pantalla"
         app:title="Mis Encomiendas"
-        app:titleTextColor="@color/color_text_primary"
+        app:titleTextColor="@color/Textos_normal_tercero"
         app:navigationIcon="@drawable/ic_arrow_back"
-        app:navigationIconTint="@color/color_text_primary"
+        app:navigationIconTint="@color/Textos_normal_tercero"
         app:layout_constraintTop_toTopOf="parent"
         app:titleCentered="true"/>
 
@@ -27,26 +27,46 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-        android:textColor="@color/black"
+        android:textColor="@color/Textos_destacado"
+        android:textSize="35sp"
+        android:textStyle="bold"
         android:maxLines="1"
         android:ellipsize="end"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbarTracking"
-        tools:text="Bienvenid@, [Nombre del usuario]" />
-
+        tools:text="HOLA, [Nombre del usuario]" />
+    <TextView
+        android:id="@+id/tvFraseBienvenida"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:layout_marginTop="16dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textSize="17sp"
+        android:textColor="@color/Textos_normal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvWelcomeUser"
+        android:text="Bienvenido al apartado de encomiendas" />
     <TextView
         android:id="@+id/tvUserDni"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:justificationMode="inter_word"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
         android:textColor="@color/gris1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvWelcomeUser"
-        tools:text="En este apartado puedes visualizar todas las encomiendas enviadas o por recibir con el DNI [DNI Usuario]" />
+        app:layout_constraintTop_toBottomOf="@id/tvFraseBienvenida"
+        tools:text="[DNI Usuario]" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"

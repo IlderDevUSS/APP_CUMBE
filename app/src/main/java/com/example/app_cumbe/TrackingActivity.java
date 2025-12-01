@@ -82,8 +82,9 @@ public class TrackingActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences(SP_NAME, MODE_PRIVATE);
         String userName = prefs.getString("USER_NAME", "Usuario");
         String userDni = prefs.getString("USER_DNI", "---");
+        String primerNombre = userName.split(" ")[0];
 
-        tvWelcomeUser.setText("Bienvenid@, " + userName);
+        tvWelcomeUser.setText("Hola, " + primerNombre);
         tvUserDni.setText("En este apartado puedes visualizar todas las encomiendas enviadas o por recibir con el DNI " + userDni);
     }
 

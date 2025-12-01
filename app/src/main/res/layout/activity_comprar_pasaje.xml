@@ -5,23 +5,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:background="@color/fondo_pantalla">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:layout_height="85dp"
+        android:background="@color/fondo_pantalla"
         app:elevation="0dp">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbarCompra"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/gris2"
+            android:background="@color/fondo_pantalla"
             app:title="Comprar Pasaje"
-            app:titleTextColor="@color/black"
+            app:titleTextColor="@color/Textos_normal_tercero"
             app:navigationIcon="@drawable/ic_arrow_back"
-            app:navigationIconTint="@color/black"/>
+            app:navigationIconTint="@color/Textos_normal_tercero"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -42,7 +42,7 @@
                 android:text="Selecciona tu Ruta"
                 android:textStyle="bold"
                 android:textSize="18sp"
-                android:textColor="@color/black"
+                android:textColor="@color/Textos_normal_tercero"
                 android:layout_marginBottom="12dp"/>
 
             <com.google.android.material.card.MaterialCardView
@@ -56,7 +56,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/color_principal_cumbe"
+                    android:background="@color/Textos_destacado"
                     android:orientation="vertical"
                     android:padding="16dp">
 
@@ -103,7 +103,7 @@
                 android:text="Fecha de Viaje"
                 android:textStyle="bold"
                 android:textSize="18sp"
-                android:textColor="@color/black"
+                android:textColor="@color/Textos_normal_tercero"
                 android:layout_marginBottom="12dp"/>
 
             <!-- TabLayout con colores explícitos -->
@@ -141,7 +141,7 @@
                 android:text="Horarios Disponibles"
                 android:textStyle="bold"
                 android:textSize="16sp"
-                android:textColor="@color/gris1"
+                android:textColor="@color/Textos_normal"
                 android:layout_marginBottom="8dp"/>
 
             <androidx.recyclerview.widget.RecyclerView

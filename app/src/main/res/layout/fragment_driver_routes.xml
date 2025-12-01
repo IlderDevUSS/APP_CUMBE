@@ -4,22 +4,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F4F6F9"
-    android:padding="16dp">
+    android:background="@color/fondo_pantalla">
 
-    <TextView
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Mis Rutas Asignadas"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_marginBottom="16dp"/>
+        android:layout_height="85dp"
+        android:background="@color/fondo_pantalla"
+        app:elevation="0dp">
+
+        <TextView
+            android:id="@+id/tvTitleServicios"
+            android:layout_width="match_parent"
+            android:layout_height="85dp"
+            android:text="Mis Rutas"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/Textos_normal_tercero"
+            android:textAlignment="center"
+            android:padding="24dp"
+            android:background="@color/fondo_pantalla"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvDriverRoutes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="16dp"
         android:clipToPadding="false"/>
 
 </LinearLayout>

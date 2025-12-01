@@ -41,4 +41,24 @@
     <color name="gradient_gray_start">#A9A9A9</color>
     <color name="gradient_gray_end">#808080</color>
 
+    <!-- Colores finales pára la aplicacion -->
+    <color name="fondo_pantalla">#FAFFFF</color>
+    <color name="fondo_secundario">#F2FCFC</color>
+    <color name="Textos_destacado">#FF7105</color>
+    <color name="Textos_normal">#313333</color>
+    <color name="Textos_normal_second">#333131</color>
+    <color name="fondo_destacados">#E4EDED</color>
+    <color name="color_iconos">#FF9C24</color>
+    <color name="Textos_normal_tercero">#644136</color>
+    <color name="Textos_destcados_conductor">#4CAF50</color>
+
+
+    <!-- Colores de estados -->
+    <color name="color_programado">#3291B6</color>
+    <color name="color_Ruta">#F5C857</color>
+    <color name="color_finalizado">#4CAF50</color>
+    <color name="color_cancelado">#BF124D</color>
+
+
+
 </resources>

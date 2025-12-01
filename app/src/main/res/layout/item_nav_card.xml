@@ -15,7 +15,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="177dp"
-        android:background="@color/gris2"
+        android:background="@color/fondo_destacados"
         android:gravity="start"
         android:orientation="vertical"
         android:padding="16dp">

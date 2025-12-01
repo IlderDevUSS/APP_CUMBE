@@ -67,6 +67,7 @@ public class HomeActivity extends AppCompatActivity {
                     if (esConductorActivo) {
                         // [CORRECCIÓN PRINCIPAL] Usar loadFragment, NO startActivity
                         loadFragment(driverRoutesFragment);
+
                     } else {
                         // Modo Cliente
                         loadFragment(ticketsFragment);

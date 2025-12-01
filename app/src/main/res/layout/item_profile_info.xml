@@ -16,10 +16,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:background="@color/fondo_destacados"
         android:padding="16dp"
         android:gravity="center_vertical">
 
-        <!-- Icono con fondo circular -->
         <FrameLayout
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -32,7 +32,7 @@
                 android:layout_height="20dp"
                 android:layout_gravity="center"
                 tools:src="@drawable/ic_email"
-                app:tint="@color/color_principal_cumbe" />
+                app:tint="@color/color_iconos" />
         </FrameLayout>
 
         <LinearLayout
@@ -56,7 +56,7 @@
                 android:layout_height="wrap_content"
                 tools:text="usuario@ejemplo.com"
                 android:textSize="16sp"
-                android:textColor="@color/color_text_primary"
+                android:textColor="@color/Textos_normal_second"
                 android:textStyle="bold"
                 android:layout_marginTop="2dp"/>
         </LinearLayout>

@@ -102,6 +102,9 @@ public class HomeFragment extends Fragment {
                 // --- MODO CONDUCTOR ACTIVO ---
                 binding.tvModeLabel.setText("Modo Conductor");
                 binding.tvNextTripTitle.setText("Tus Rutas Asignadas");
+                binding.tvWelcomeName.setTextColor(ContextCompat.getColor(requireContext(), R.color.Textos_destcados_conductor));
+                binding.switchDriverMode.setTrackTintList(ContextCompat.getColorStateList(requireContext(), R.color.Textos_destcados_conductor));
+
 
                 // 1. Ocultar interfaz Cliente
                 binding.cardNextTrip.setVisibility(View.GONE);
@@ -109,9 +112,8 @@ public class HomeFragment extends Fragment {
 
                 // 2. Cambiar icono del BottomNav a BUS (Conductor)
                 if (bottomNav != null) {
-                    // Asegúrate de tener un icono ic_directions_bus o similar
                     bottomNav.getMenu().findItem(R.id.navigation_tickets).setIcon(R.drawable.ic_directions_bus);
-                    bottomNav.getMenu().findItem(R.id.navigation_tickets).setTitle("Mis Rutas");
+                    bottomNav.getMenu().findItem(R.id.navigation_tickets).setTitle("Rutas");
                 }
 
                 // Guardar estado en preferencias para HomeActivity
@@ -124,6 +126,9 @@ public class HomeFragment extends Fragment {
                 // --- MODO CLIENTE ACTIVO ---
                 binding.tvModeLabel.setText("Modo Cliente");
                 binding.tvNextTripTitle.setText("Tu Próximo Viaje");
+                //volvemos el tvWelcomeName a su color original
+                binding.tvWelcomeName.setTextColor(ContextCompat.getColor(requireContext(), R.color.Textos_destacado));
+                binding.switchDriverMode.setTrackTintList(ContextCompat.getColorStateList(requireContext(), R.color.Textos_destacado));
 
                 // 1. Ocultar interfaz Conductor (AMBAS TARJETAS)
                 binding.cardDriverRoute.setVisibility(View.GONE);
@@ -166,6 +171,21 @@ public class HomeFragment extends Fragment {
                     String estadoRaw = rutaActualConductor.getEstado();
                     String estadoLimpio = estadoRaw.replace("_", " ");
                     binding.tvDriverStatus.setText("ESTADO: " + estadoLimpio);
+                    //asignarle color de acuerdo al estado
+                    switch (estadoLimpio) {
+                        case "PROGRAMADO":
+                            binding.tvDriverStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_programado));
+                            break;
+                            case "EN RUTA":
+                                binding.tvDriverStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_Ruta));
+                                break;
+                                case "FINALIZADO":
+                                    binding.tvDriverStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_finalizado));
+                                    break;
+                                    case "CANCELADO":
+                                        binding.tvDriverStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_cancelado));
+                                        break;
+                    }
 
                     // CORRECCIÓN 2: Mostrar Pasajeros
                     String info = rutaActualConductor.getFechaSalida() + " - " + rutaActualConductor.getHoraSalida();
@@ -196,6 +216,7 @@ public class HomeFragment extends Fragment {
         if (tieneRuta) {
             binding.cardDriverRoute.setVisibility(View.VISIBLE);
             binding.cardDriverNoRoute.setVisibility(View.GONE);
+
         } else {
             binding.cardDriverRoute.setVisibility(View.GONE);
             binding.cardDriverNoRoute.setVisibility(View.VISIBLE);
@@ -294,7 +315,7 @@ public class HomeFragment extends Fragment {
 
     private void setupPromoCarousel() {
         List<Integer> promoImages = Arrays.asList(
-                R.drawable.bus_1,
+                R.drawable.prom_1,
                 R.drawable.bus_2,
                 R.drawable.bus_3
         );

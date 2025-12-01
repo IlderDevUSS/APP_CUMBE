@@ -5,24 +5,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_surface_bg"
+    android:background="@color/fondo_pantalla"
     tools:context=".ServiciosActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/color_divider"
+        android:layout_height="100dp"
+        android:background="@color/fondo_pantalla"
         app:elevation="0dp">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbarServicios"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Nuestra Empresa"
-            app:titleTextColor="@color/color_text_primary"
             app:navigationIcon="@drawable/ic_arrow_back"
-            app:navigationIconTint="@color/color_text_primary"
-            app:titleCentered="true"/>
+            app:navigationIconTint="@color/Textos_normal_tercero"
+            app:title="Nuestra Empresa"
+            app:titleCentered="true"
+            app:titleTextColor="@color/Textos_normal_tercero" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -59,7 +59,7 @@
                 android:text="Sobre Nosotros"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="@color/color_text_primary"
+                android:textColor="@color/Textos_destacado"
                 android:layout_marginBottom="16dp"/>
 
             <com.google.android.material.card.MaterialCardView
@@ -75,6 +75,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/fondo_destacados"
                     android:orientation="vertical"
                     android:padding="16dp">
 
@@ -88,21 +89,21 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_info"
-                            app:tint="@color/color_principal_cumbe"
+                            app:tint="@color/color_iconos"
                             android:layout_marginEnd="8dp"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Misión"
                             android:textStyle="bold"
-                            android:textColor="@color/color_text_primary"/>
+                            android:textColor="@color/Textos_normal_second"/>
                     </LinearLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Brindar un servicio de transporte interprovincial seguro, puntual y de calidad, conectando a las familias peruanas."
-                        android:textColor="@color/color_text_secondary"
+                        android:textColor="@color/Textos_normal"
                         android:lineSpacingExtra="4dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -121,6 +122,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:background="@color/fondo_destacados"
                     android:padding="16dp">
 
                     <LinearLayout
@@ -133,21 +135,21 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_track_changes"
-                            app:tint="@color/color_principal_cumbe"
+                            app:tint="@color/color_iconos"
                             android:layout_marginEnd="8dp"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Visión"
                             android:textStyle="bold"
-                            android:textColor="@color/color_text_primary"/>
+                            android:textColor="@color/Textos_normal_second"/>
                     </LinearLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Ser la empresa líder en transporte terrestre en el norte del país, reconocida por nuestra innovación y compromiso con el cliente."
-                        android:textColor="@color/color_text_secondary"
+                        android:textColor="@color/Textos_normal"
                         android:lineSpacingExtra="4dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -159,7 +161,7 @@
                 android:text="Nuestras Sucursales"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="@color/color_text_primary"
+                android:textColor="@color/Textos_destacado"
                 android:layout_marginBottom="16dp"/>
 
             <!-- Tarjeta Sucursal 1 -->

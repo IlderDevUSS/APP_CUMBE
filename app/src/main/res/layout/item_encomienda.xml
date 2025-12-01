@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/fondo_secundario"
     android:layout_margin="8dp"
     app:cardCornerRadius="10dp"
     app:cardElevation="4dp">
@@ -43,6 +44,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Encomienda #[TRX_CODE] - [ESTADO]" />
+
 
             <ImageView
                 android:id="@+id/ivAccordionIcon"

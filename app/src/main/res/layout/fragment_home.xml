@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="#F4F6F9">
+    android:background="@color/fondo_pantalla">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,8 +16,8 @@
         <LinearLayout
             android:id="@+id/headerHome"
             android:layout_width="match_parent"
-            android:layout_height="137dp"
-            android:background="#F4F6F9"
+            android:layout_height="130dp"
+            android:background="@color/fondo_pantalla"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="20dp">
@@ -32,7 +32,7 @@
                     android:id="@+id/tvWelcomeName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/color_principal_cumbe"
+                    android:textColor="@color/Textos_destacado"
                     android:textSize="35sp"
                     android:textStyle="bold"
                     tools:text="Hola, {nombre]" />
@@ -42,7 +42,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:text="¿Con ganas de viajar hoy?"
-                    android:textColor="#644136"
+                    android:textColor="@color/Textos_normal_tercero"
                     android:textSize="20sp" />
             </LinearLayout>
 
@@ -87,7 +87,7 @@
                 android:text=""
                 app:showText="false"
                 app:thumbTint="@color/white"
-                app:trackTint="@color/color_principal_cumbe"/>
+                app:trackTint="@color/Textos_destacado"/>
 
         </LinearLayout>
 
@@ -111,10 +111,13 @@
                 android:id="@+id/tvNextTripTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
                 android:text="Tu Próximo Viaje"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                android:textColor="@color/black"
-                android:layout_marginBottom="8dp"/>
+                android:textColor="@color/Textos_normal_tercero"/>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardDriverRoute"
@@ -122,8 +125,7 @@
                 android:layout_height="wrap_content"
                 app:cardElevation="8dp"
                 app:cardCornerRadius="15dp"
-                android:visibility="gone"
-                android:layout_marginBottom="20dp">
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -411,18 +413,17 @@
                 android:id="@+id/tvfraseEslogan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:text="Mas opciones"
                 android:textAlignment="center"
-                android:textColor="@color/black"
+                android:textColor="@color/Textos_normal_tercero"
                 android:textSize="21sp"
                 android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="5dp">
+                android:orientation="vertical">
 
                 <include layout="@layout/item_nav_card" android:id="@+id/cardComprarPasaje"
                     android:layout_width="match_parent"
@@ -441,12 +442,12 @@
             android:id="@+id/footerTopBorder"
             android:layout_width="match_parent"
             android:layout_height="10dp"
-            android:background="@color/color_principal_cumbe"/>
+            android:background="@color/Textos_destacado"/>
 
         <View
             android:id="@+id/footerView"
             android:layout_width="match_parent"
             android:layout_height="155dp"
-            android:background="@drawable/bus_3"/>
+            android:background="@drawable/footer1"/>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

@@ -43,9 +43,17 @@ public class ProfileFragment extends Fragment {
         String dni = prefs.getString("USER_DNI", "No disponible");
         String phone = prefs.getString("USER_PHONE", "No disponible");
         String birthDate = prefs.getString("USER_BIRTH_DATE", "No disponible");
+        String tipo_usuario = prefs.getString("tipo_usuario", "No disponible");
+
+
 
         binding.tvProfileNameHeader.setText(name);
-
+        //Comprobamos que tipo de usuario es, si el tipo es CONDUCTOR, le asignamos Conductor, si es CLIENTE, cliente
+        if (tipo_usuario.equals("CONDUCTOR")) {
+            binding.tvProfileTipo.setText("Conductor");
+        } else if (tipo_usuario.equals("CLIENTE")) {
+            binding.tvProfileTipo.setText("Cliente");
+        }
         setProfileInfo(binding.cardEmail.getRoot(), "Email", email, R.drawable.ic_profile_mail);
         setProfileInfo(binding.cardDni.getRoot(), "DNI", dni, R.drawable.ic_badge);
         setProfileInfo(binding.cardPhone.getRoot(), "Teléfono", phone, R.drawable.ic_profile_phone);

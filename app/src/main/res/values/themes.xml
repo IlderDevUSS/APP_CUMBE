@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.APP_Cumbe" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.APP_Cumbe" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -20,7 +20,7 @@
         <item name="android:textSize">14sp</item>
         <item name="android:layout_marginBottom">4dp</item>
     </style>
-    <style name="Theme.APP_Cumbe.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.APP_Cumbe.NoActionBar" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/color_principal_cumbe</item>
         <item name="colorPrimaryVariant">@color/color_principal_cumbe</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -49,7 +49,7 @@
         <item name="android:layout_marginBottom">16dp</item>
     </style>
 
-    <style name="Theme.App_cumbe" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.App_cumbe" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="fontFamily">sans-serif</item>
 
         <item name="android:windowTranslucentStatus">true</item>
