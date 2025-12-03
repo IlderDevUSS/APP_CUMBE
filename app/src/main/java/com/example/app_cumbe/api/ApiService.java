@@ -102,4 +102,7 @@ public interface ApiService {
             @Field("conductor_id") int conductorId,
             @Field("costo_estimado") double costoEstimado // <--- AÑADIDO
     );
+
+    @GET("api/pasajes/{id}")
+    Call<Ticket> getPasajePorId(@Header("Authorization") String token, @Path("id") int pasajeId);
 }

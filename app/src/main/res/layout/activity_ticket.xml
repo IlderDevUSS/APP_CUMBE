@@ -1,156 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/Textos_destacado"
-    android:fillViewport="true">
+    android:background="@color/Textos_destacado">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:padding="24dp">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <TextView
-            android:id="@+id/tvTituloExito"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Detalle del Pasaje"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="24dp"/>
-
-        <!-- El Ticket Visual Tipo Vaucher -->
-        <com.google.android.material.card.MaterialCardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="8dp"
-            app:cardBackgroundColor="@color/white">
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:padding="24dp">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/tvTituloExito"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Detalle del Pasaje"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="24dp"/>
+
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="@color/white">
 
-                <!-- Cabecera Ticket -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="24dp"
-                    android:gravity="center">
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="90dp"
-                        android:layout_height="90dp"
-                        android:src="@drawable/logocumbe2"
-                        android:layout_marginBottom="12dp"/>
-
-                </LinearLayout>
-
-                <!-- Línea separadora punteada -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layerType="software"
-                    android:background="@drawable/bg_white_pill"
-                    android:backgroundTint="#DDDDDD"/>
-
-                <!-- Cuerpo del Ticket -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@color/fondo_pantalla"
-                    android:padding="24dp">
-
-                    <!-- Ruta y Fecha -->
-                    <TextView
-                        android:id="@+id/tvTicketRuta"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        tools:text="LIMA - TRUJILLO"
-                        android:textAlignment="center"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/Textos_destacado"/>
-
-                    <TextView
-                        android:id="@+id/tvTicketFecha"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        tools:text="25 Nov 2023 - 08:30 PM"
-                        android:textAlignment="center"
-                        android:textColor="@color/Textos_normal"
-                        android:textSize="16sp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="24dp"/>
-
-                    <!-- Bloque Asiento y Precio -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:baselineAligned="false"
-                        android:layout_marginBottom="24dp">
+                        android:orientation="vertical"
+                        android:padding="24dp"
+                        android:gravity="center">
 
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ASIENTO" android:textSize="12sp" android:textColor="@color/Textos_normal"/>
-                            <TextView android:id="@+id/tvTicketAsiento" android:layout_width="wrap_content" android:layout_height="wrap_content" tools:text="24" android:textSize="28sp" android:textStyle="bold" android:textColor="@color/Textos_normal_second"/>
-                        </LinearLayout>
+                        <ImageView
+                            android:layout_width="90dp"
+                            android:layout_height="90dp"
+                            android:src="@drawable/logocumbe2"
+                            android:layout_marginBottom="12dp"/>
 
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PRECIO" android:textSize="12sp" android:textColor="@color/Textos_normal"/>
-                            <TextView android:id="@+id/tvTicketPrecio" android:layout_width="wrap_content" android:layout_height="wrap_content" tools:text="S/ 45.00" android:textSize="28sp" android:textStyle="bold" android:textColor="@color/Textos_normal_second"/>
-                        </LinearLayout>
                     </LinearLayout>
 
-                    <!-- Datos del Pasajero -->
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PASAJERO" android:textSize="12sp" android:textColor="@color/Textos_normal"/>
-                    <TextView android:id="@+id/tvTicketPasajero" android:layout_width="match_parent" android:layout_height="wrap_content" tools:text="JUAN PEREZ LOPEZ" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/Textos_normal_second" android:layout_marginBottom="12dp"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layerType="software"
+                        android:background="@drawable/bg_white_pill"
+                        android:backgroundTint="#DDDDDD"/>
 
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="DOCUMENTO (DNI)" android:textSize="12sp" android:textColor="@color/Textos_normal"/>
-                    <TextView android:id="@+id/tvTicketDni" android:layout_width="match_parent" android:layout_height="wrap_content" tools:text="70554433" android:textSize="16sp" android:textColor="@color/Textos_normal_second" android:layout_marginBottom="12dp"/>
-
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SERVICIO" android:textSize="12sp" android:textColor="@color/Textos_normal"/>
-                    <TextView android:id="@+id/tvTicketServicio" android:layout_width="match_parent" android:layout_height="wrap_content" tools:text="BUS CAMA 160°" android:textSize="16sp" android:textColor="@color/Textos_normal_second" android:layout_marginBottom="12dp"/>
-
-                    <TextView
-                        android:id="@+id/tvTransaccionInfo"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        tools:text="Ref. Transacción: #5555"
-                        android:gravity="center"
-                        android:textSize="12sp"
-                        android:layout_marginTop="16dp"
-                        android:textColor="@color/Textos_normal_second"/>
+                        android:orientation="vertical"
+                        android:background="@color/fondo_pantalla"
+                        android:padding="24dp">
 
+                        <TextView
+                            android:id="@+id/tvTicketRuta"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:text="LIMA - TRUJILLO"
+                            android:textAlignment="center"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/Textos_destacado"/>
+
+                        <TextView
+                            android:id="@+id/tvTicketFecha"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:text="25 Nov 2023 - 08:30 PM"
+                            android:textAlignment="center"
+                            android:textColor="@color/Textos_normal"
+                            android:textSize="16sp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="24dp"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:baselineAligned="false"
+                            android:layout_marginBottom="24dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ASIENTO" android:textSize="12sp" android:textColor="@color/Textos_normal"/>
+                                <TextView android:id="@+id/tvTicketAsiento" android:layout_width="wrap_content" android:layout_height="wrap_content" tools:text="24" android:textSize="28sp" android:textStyle="bold" android:textColor="@color/Textos_normal_second"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PRECIO" android:textSize="12sp" android:textColor="@color/Textos_normal"/>
+                                <TextView android:id="@+id/tvTicketPrecio" android:layout_width="wrap_content" android:layout_height="wrap_content" tools:text="S/ 45.00" android:textSize="28sp" android:textStyle="bold" android:textColor="@color/Textos_normal_second"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PASAJERO" android:textSize="12sp" android:textColor="@color/Textos_normal"/>
+                        <TextView android:id="@+id/tvTicketPasajero" android:layout_width="match_parent" android:layout_height="wrap_content" tools:text="JUAN PEREZ LOPEZ" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/Textos_normal_second" android:layout_marginBottom="12dp"/>
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="DOCUMENTO (DNI)" android:textSize="12sp" android:textColor="@color/Textos_normal"/>
+                        <TextView android:id="@+id/tvTicketDni" android:layout_width="match_parent" android:layout_height="wrap_content" tools:text="70554433" android:textSize="16sp" android:textColor="@color/Textos_normal_second" android:layout_marginBottom="12dp"/>
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SERVICIO" android:textSize="12sp" android:textColor="@color/Textos_normal"/>
+                        <TextView android:id="@+id/tvTicketServicio" android:layout_width="match_parent" android:layout_height="wrap_content" tools:text="BUS CAMA 160°" android:textSize="16sp" android:textColor="@color/Textos_normal_second" android:layout_marginBottom="12dp"/>
+
+                        <TextView
+                            android:id="@+id/tvEstadoViaje"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textAlignment="center"
+                            android:text="VENDIDO"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="4dp"
+                            android:background="@drawable/bg_white_pill"
+                            android:textColor="@color/color_programado"/>
+
+                        <TextView
+                            android:id="@+id/tvTransaccionInfo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:text="Ref. Transacción: #5555"
+                            android:gravity="center"
+                            android:textSize="12sp"
+                            android:layout_marginTop="16dp"
+                            android:textColor="@color/Textos_normal_second"/>
+
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+            </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnVolverInicio"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:text="Cerrar / Volver al Inicio"
-            android:layout_marginTop="32dp"
-            app:backgroundTint="@color/white"
-            android:textColor="@color/color_principal_cumbe"
-            app:cornerRadius="12dp"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnVolverInicio"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="Cerrar / Volver al Inicio"
+                android:layout_marginTop="32dp"
+                app:backgroundTint="@color/white"
+                android:textColor="@color/color_principal_cumbe"
+                app:cornerRadius="12dp"/>
 
-    </LinearLayout>
-</ScrollView>
+        </LinearLayout>
+    </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:indeterminateTint="@color/white" />
+
+</FrameLayout>
