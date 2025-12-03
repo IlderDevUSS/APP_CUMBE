@@ -111,7 +111,16 @@ public class TicketsFragment extends Fragment {
                         tvEmpty.setVisibility(View.GONE);
                     }
                 } else {
-                    tvEmpty.setText("No se pudieron cargar los viajes.");
+                    // CAMBIO: Mostrar el error real del servidor
+                    String errorMsg = "Error desconocido";
+                    try {
+                        if (response.errorBody() != null) {
+                            errorMsg = response.errorBody().string(); // Aquí vendrá el mensaje de Python
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    tvEmpty.setText("Error del servidor (" + response.code() + "):\n" + errorMsg);
                     tvEmpty.setVisibility(View.VISIBLE);
                 }
             }
@@ -120,7 +129,7 @@ public class TicketsFragment extends Fragment {
             public void onFailure(Call<List<Ticket>> call, Throwable t) {
                 if (!isAdded()) return;
                 progressBar.setVisibility(View.GONE);
-                tvEmpty.setText("Error de conexión");
+                tvEmpty.setText("Fallo de conexión: " + t.getMessage());
                 tvEmpty.setVisibility(View.VISIBLE);
             }
         });
