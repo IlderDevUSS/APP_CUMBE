@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:layout_marginHorizontal="16dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="@color/white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/indicatorBar"
+            android:layout_width="6dp"
+            android:layout_height="0dp"
+            android:background="@color/color_principal_cumbe"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <ImageView
+            android:id="@+id/ivIcono"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_directions_bus"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="16dp"
+            app:tint="@color/gris1"
+            app:layout_constraintStart_toEndOf="@id/indicatorBar"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <View
+            android:id="@+id/viewUnreadDot"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/bg_circle_accent"
+            android:backgroundTint="@color/color_cancelado"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="@id/ivIcono"
+            app:layout_constraintTop_toTopOf="@id/ivIcono"
+            android:layout_marginTop="-2dp"
+            android:layout_marginEnd="-2dp"/>
+
+        <TextView
+            android:id="@+id/tvTitulo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Recordatorio de Viaje"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="@color/Textos_normal"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintStart_toEndOf="@id/ivIcono"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/ivIcono"/>
+
+        <TextView
+            android:id="@+id/tvContenido"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Tu bus sale en 1 hora."
+            android:textSize="14sp"
+            android:textColor="@color/Textos_normal_second"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintStart_toStartOf="@id/tvTitulo"
+            app:layout_constraintEnd_toEndOf="@id/tvTitulo"
+            app:layout_constraintTop_toBottomOf="@id/tvTitulo"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/tvFecha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10:30 AM"
+            android:textSize="12sp"
+            android:textColor="@color/gris2"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvContenido"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

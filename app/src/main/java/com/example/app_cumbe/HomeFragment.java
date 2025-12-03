@@ -63,6 +63,10 @@ public class HomeFragment extends Fragment {
         setNavCard(binding.cardComprarPasaje.getRoot(), R.drawable.ic_local_activity, "Comprar Pasaje", "Encuentra tu ruta y reserva tu asiento.", R.color.color_principal_cumbe);
         setNavCard(binding.cardSeguimiento.getRoot(), R.drawable.ic_track_changes, "Seguimiento de Encomienda", "Consulta el estado de tu envío.", R.color.color_estado_entregado);
 
+        view.findViewById(R.id.cardServicios).setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), ServiciosActivity.class);
+            startActivity(intent);
+        });
         // Carga inicial (Cliente por defecto o estado anterior)
         cargarProximoViaje();
         setupListeners();

@@ -11,9 +11,9 @@
         android:title="Mis Tickets" />
 
     <item
-        android:id="@+id/navigation_services"
-        android:icon="@drawable/ic_info"
-        android:title="Servicios" />
+        android:id="@+id/navigation_notifications"
+        android:icon="@drawable/ic_notifications"
+        android:title="Notificaciones" />
 
     <item
         android:id="@+id/navigation_profile"

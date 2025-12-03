@@ -3,6 +3,9 @@ package com.example.app_cumbe;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,11 +16,16 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
-import com.example.app_cumbe.api.ApiClient; // Importante
+import com.example.app_cumbe.api.ApiClient;
 import com.example.app_cumbe.databinding.ActivityHomeBinding;
+import com.example.app_cumbe.model.db.AppDatabase;
+import com.google.android.material.badge.BadgeDrawable;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 import static com.example.app_cumbe.LoginActivity.SP_NAME;
+
+import java.util.concurrent.TimeUnit;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -28,9 +36,10 @@ public class HomeActivity extends AppCompatActivity {
     private final Fragment ticketsFragment = new TicketsFragment();
     private final Fragment servicesFragment = new ServicesFragment();
     private final Fragment profileFragment = new ProfileFragment();
+
+    private final Fragment notificationsFragment = new NotificationsFragment();
     // [CORRECCIÓN 1] Instanciamos el fragmento de conductor aquí
     private final Fragment driverRoutesFragment = new DriverRoutesFragment();
-
     private Handler handler;
     private Runnable logoutRunnable;
     private static final long TIEMPO_INACTIVIDAD = 7 * 60 * 1000;
@@ -44,7 +53,7 @@ public class HomeActivity extends AppCompatActivity {
 
         // [CORRECCIÓN 2] Inicializar ApiClient por seguridad si la app se restaura aquí
         ApiClient.init(this);
-
+        programarNotificaciones();
         lastInteractionTime = System.currentTimeMillis();
         initInactivityTimer();
 
@@ -74,8 +83,9 @@ public class HomeActivity extends AppCompatActivity {
                     }
                     return true; // Retornamos true para que el icono se marque como seleccionado
 
-                } else if (itemId == R.id.navigation_services) {
-                    loadFragment(servicesFragment);
+                } else if (itemId == R.id.navigation_notifications) {
+                    loadFragment(notificationsFragment);
+                    limpiarBadgeNotificaciones();
                     return true;
                 } else if (itemId == R.id.navigation_profile) {
                     loadFragment(profileFragment);
@@ -86,7 +96,49 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
+    private void programarNotificaciones() {
+        // Configura el worker para que se ejecute cada 15 minutos (mínimo permitido por Android)
+        // o cada hora para ahorrar batería.
+        PeriodicWorkRequest workRequest = new PeriodicWorkRequest.Builder(
+                NotificationsWorker.class,
+                1, TimeUnit.HOURS) // Ejecutar cada 1 hora
+                .build();
 
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+                "CheckViajes",
+                ExistingPeriodicWorkPolicy.KEEP, // Si ya existe, no lo reemplaza (KEEP)
+                workRequest
+        );
+
+        // TRUCO PARA PROBAR YA MISMO: Ejecutar una vez inmediatamente
+        androidx.work.OneTimeWorkRequest oneTimeRequest =
+                new androidx.work.OneTimeWorkRequest.Builder(NotificationsWorker.class).build();
+        WorkManager.getInstance(this).enqueue(oneTimeRequest);
+    }
+
+    public void actualizarBadgeNotificaciones() {
+        AppDatabase db = AppDatabase.getDatabase(this);
+        int noLeidas = db.notificacionDao().contarNoLeidas();
+
+        // Cuidado: getOrCreateBadge usa el ID del menú
+        BadgeDrawable badge = binding.bottomNavigation.getOrCreateBadge(R.id.navigation_notifications);
+
+        if (noLeidas > 0) {
+            badge.setVisible(true);
+            badge.setNumber(noLeidas);
+            badge.setBackgroundColor(getColor(R.color.color_cancelado)); // Rojo
+        } else {
+            badge.setVisible(false);
+        }
+    }
+
+    private void limpiarBadgeNotificaciones() {
+        BadgeDrawable badge = binding.bottomNavigation.getBadge(R.id.navigation_notifications);
+        if (badge != null) {
+            badge.setVisible(false);
+            // badge.clearNumber(); // Opcional
+        }
+    }
 
     private void initInactivityTimer() {
         handler = new Handler(Looper.getMainLooper());
@@ -125,7 +177,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onResume();
         long currentTime = System.currentTimeMillis();
         long tiempoTranscurrido = currentTime - lastInteractionTime;
-
+        actualizarBadgeNotificaciones();
         if (tiempoTranscurrido >= TIEMPO_INACTIVIDAD) {
             Toast.makeText(this, "Tu sesión ha expirado por inactividad", Toast.LENGTH_LONG).show();
             cerrarSesion();

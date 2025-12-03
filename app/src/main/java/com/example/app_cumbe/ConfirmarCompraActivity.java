@@ -12,12 +12,18 @@ import com.example.app_cumbe.api.ApiService;
 import com.example.app_cumbe.databinding.ActivityConfirmarCompraBinding;
 import com.example.app_cumbe.model.RequestCompra;
 import com.example.app_cumbe.model.ResponseCompra;
+import com.example.app_cumbe.model.db.AppDatabase;
+import com.example.app_cumbe.model.db.NotificacionEntity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.example.app_cumbe.LoginActivity.SP_NAME;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class ConfirmarCompraActivity extends AppCompatActivity {
 
@@ -57,6 +63,7 @@ public class ConfirmarCompraActivity extends AppCompatActivity {
         if (rutaStr == null) rutaStr = "";
         fechaStr = i.getStringExtra("FECHA");
         if (fechaStr == null) fechaStr = "";
+
     }
 
     private void cargarDatosUsuarioSesion() {
@@ -194,6 +201,21 @@ public class ConfirmarCompraActivity extends AppCompatActivity {
                     intent.putExtra("PASAJERO_NOMBRE", nom+ " " + ape);
                     intent.putExtra("PASAJERO_DNI", dni);
                     intent.putExtra("SERVICIO", servicioBus);
+                    intent.putExtra("PASAJERO_CELULAR", cel);
+
+                        // --- NUEVO: Crear Notificación Local ---
+                    AppDatabase db = AppDatabase.getDatabase(ConfirmarCompraActivity.this);
+                        NotificacionEntity notifCompra = new NotificacionEntity(
+                                "Compra Exitosa",
+                                "Has comprado tu pasaje a " + rutaStr + " correctamente. Asiento: " + asiento,
+                                "COMPRA",
+                                new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(new Date())
+                        );
+                        notifCompra.referenciaId = response.body().getPasajeId();
+                        notifCompra.origenReferencia = "HORARIO";
+                        db.notificacionDao().insertar(notifCompra);
+                        // ---------------------------------------
+
                     startActivity(intent);
                     finish();
                 } else {
