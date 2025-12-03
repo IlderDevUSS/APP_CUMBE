@@ -69,6 +69,8 @@ public class TicketsFragment extends Fragment {
             intent.putExtra("ASIENTO", ticket.getAsiento());
             intent.putExtra("PRECIO", ticket.getPrecio());
             intent.putExtra("SERVICIO", ticket.getServicio());
+            intent.putExtra("ESTADO", ticket.getEstado());
+
 
             startActivity(intent);
         });

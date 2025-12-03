@@ -41,7 +41,7 @@
                 android:paddingHorizontal="8dp"
                 android:paddingVertical="4dp"
                 android:background="@drawable/bg_white_pill"
-                android:textColor="#2E7D32"/>
+                android:textColor="@color/color_programado"/>
         </LinearLayout>
 
         <View

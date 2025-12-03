@@ -65,6 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:background="@color/fondo_pantalla"
             android:padding="16dp">
 
             <LinearLayout
@@ -130,6 +131,20 @@
                 tools:text="DNI: 70554433"
                 android:textColor="@color/Textos_normal_second"
                 android:textSize="11sp"/>
+
+            <TextView
+                android:id="@+id/tvEstadoViaje"
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:text="[ESTADO]"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
+                android:background="@drawable/bg_white_pill"
+                android:textColor="@color/color_programado"/>
 
         </LinearLayout>
 

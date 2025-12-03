@@ -1,12 +1,18 @@
 package com.example.app_cumbe;
 
+import static androidx.core.content.ContentProviderCompat.requireContext;
+
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.app_cumbe.model.Ticket;
+
+import java.text.BreakIterator;
 import java.util.List;
 
 public class TicketsAdapter extends RecyclerView.Adapter<TicketsAdapter.ViewHolder> {
@@ -34,7 +40,7 @@ public class TicketsAdapter extends RecyclerView.Adapter<TicketsAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Ticket ticket = listaTickets.get(position);
-
+        Context context = holder.itemView.getContext();
         holder.tvRuta.setText(ticket.getOrigen() + " - " + ticket.getDestino());
         holder.tvFecha.setText(ticket.getFechaSalida());
         holder.tvAsiento.setText("Asiento " + ticket.getAsiento());
@@ -51,7 +57,29 @@ public class TicketsAdapter extends RecyclerView.Adapter<TicketsAdapter.ViewHold
                 (ticket.getApellidos() != null ? ticket.getApellidos() : "");
         holder.tvPasajeroNombre.setText(nombreCompleto.trim().isEmpty() ? "Pasajero" : nombreCompleto);
         holder.tvPasajeroDni.setText("DNI: " + (ticket.getDni() != null ? ticket.getDni() : "---"));
+        //Darle un color al texto y estado (VENDIDO = PROGRAMADO, CANCELADO = CANCELADO, REPROGRAMADO = REPROGRAMADO) de acuerdo al estado recibido
+        if (ticket.getEstado().equals("VENDIDO")) {
+            holder.tvEstadoViaje.setText("PROGRAMADO");
+            // ASÍ SE CAMBIA EL COLOR DEL TEXTO:
+            holder.tvEstadoViaje.setTextColor(ContextCompat.getColor(context, R.color.color_programado));
 
+        } else if (ticket.getEstado().equals("CANCELADO")) {
+            holder.tvEstadoViaje.setText("CANCELADO");
+            holder.tvEstadoViaje.setTextColor(ContextCompat.getColor(context, R.color.color_cancelado));
+
+        } else if (ticket.getEstado().equals("REPROGRAMADO")) {
+            holder.tvEstadoViaje.setText("REPROGRAMADO");
+            // Asegúrate de tener este color definido en colors.xml, si no, usa otro temporalmente
+            holder.tvEstadoViaje.setTextColor(ContextCompat.getColor(context, R.color.color_Reprogramado)); // O el color que definas
+
+        } else if (ticket.getEstado().equals("FINALIZADO")) { // Agrego este caso común
+            holder.tvEstadoViaje.setText("FINALIZADO");
+            holder.tvEstadoViaje.setTextColor(ContextCompat.getColor(context, R.color.color_finalizado));
+
+        } else {
+            holder.tvEstadoViaje.setText("SIN ESTADO");
+            holder.tvEstadoViaje.setTextColor(ContextCompat.getColor(context, R.color.gris1)); // Color por defecto
+        }
         // Click listener
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) listener.onTicketClick(ticket);
@@ -64,7 +92,7 @@ public class TicketsAdapter extends RecyclerView.Adapter<TicketsAdapter.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvRuta, tvFecha, tvAsiento, tvHora, tvServicio, tvPrecio, tvPasajeroNombre, tvPasajeroDni;
+        TextView tvRuta, tvFecha, tvAsiento, tvHora, tvServicio, tvPrecio, tvPasajeroNombre, tvPasajeroDni,tvEstadoViaje;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -76,6 +104,7 @@ public class TicketsAdapter extends RecyclerView.Adapter<TicketsAdapter.ViewHold
             tvPrecio = itemView.findViewById(R.id.tvPrecio);
             tvPasajeroNombre = itemView.findViewById(R.id.tvPasajeroNombre);
             tvPasajeroDni = itemView.findViewById(R.id.tvPasajeroDni);
+            tvEstadoViaje = itemView.findViewById(R.id.tvEstadoViaje);
         }
     }
 }
