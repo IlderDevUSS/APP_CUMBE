@@ -77,6 +77,8 @@ public interface ApiService {
     @GET("api/pasajes/historial")
     Call<List<Ticket>> getHistorialPasajes(@Header("Authorization") String token);
 
+    @GET("conductor/historial_rutas")
+    Call<List<RutaConductor>> getHistorialRutasConductor(@Query("dni") String dni);
     // Dentro de ApiService interface
 // Obtener la ruta asignada actual (o próxima) del conductor
     @GET("conductor/ruta_actual")

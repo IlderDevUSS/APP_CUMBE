@@ -66,25 +66,25 @@ public class DriverRoutesFragment extends Fragment {
 
         // Usamos la misma API getRutaActualConductor para probar.
         // Si tienes una API de historial que devuelva lista, úsala aquí.
-        Call<RutaConductor> call = apiService.getRutaActualConductor(dni);
+        Call<List<RutaConductor>> call = apiService.getHistorialRutasConductor(dni);
 
-        call.enqueue(new Callback<RutaConductor>() {
+        call.enqueue(new Callback<List<RutaConductor>>() {
             @Override
-            public void onResponse(Call<RutaConductor> call, Response<RutaConductor> response) {
-                List<RutaConductor> listaRutas = new ArrayList<>();
-
+            public void onResponse(Call<List<RutaConductor>> call, Response<List<RutaConductor>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    listaRutas.add(response.body());
-                    adapter.setData(listaRutas);
+                    // Pasamos la lista completa directamente al adaptador
+                    adapter.setData(response.body());
+
+                    if (response.body().isEmpty()) {
+                        Toast.makeText(getContext(), "No tienes historial de rutas.", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    // Lista vacía si no hay rutas
-                    adapter.setData(new ArrayList<>());
-                    Toast.makeText(getContext(), "No tienes rutas asignadas.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Error al cargar rutas", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<RutaConductor> call, Throwable t) {
+            public void onFailure(Call<List<RutaConductor>> call, Throwable t) {
                 Toast.makeText(getContext(), "Error de conexión", Toast.LENGTH_SHORT).show();
             }
         });
