@@ -25,7 +25,7 @@
                 android:layout_height="match_parent"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_arrow_back"
-                app:tint="@color/dark_text_title"
+                app:tint="@color/Textos_normal_tercero"
                 android:contentDescription="Volver"
                 android:layout_marginBottom="16dp"/>
 
@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Crear Cuenta"
-                android:textColor="@color/dark_text_title"
+                android:textColor="@color/Textos_normal_tercero"
                 android:textSize="34sp"
                 android:textStyle="bold" />
 

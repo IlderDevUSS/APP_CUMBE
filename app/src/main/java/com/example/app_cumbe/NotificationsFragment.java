@@ -1,5 +1,8 @@
 package com.example.app_cumbe;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +16,18 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.app_cumbe.api.ApiClient;
+import com.example.app_cumbe.api.ApiService;
+import com.example.app_cumbe.model.Ticket;
 import com.example.app_cumbe.model.db.AppDatabase;
 import com.example.app_cumbe.model.db.NotificacionEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class NotificationsFragment extends Fragment {
 
@@ -56,31 +66,79 @@ public class NotificationsFragment extends Fragment {
 
         // MANEJO DEL CLIC EN LA NOTIFICACIÓN
         adapter.setOnItemClickListener(notificacion -> {
-            // 1. Marcar como leída en BD
-            AppDatabase db = AppDatabase.getDatabase(requireContext());
-            db.notificacionDao().marcarComoLeida(notificacion.id);
+            // 1. Marcar como leída y actualizar UI (si no lo estaba ya)
+            marcarNotificacionComoLeida(notificacion);
 
-            // 2. Actualizar el badge del menú principal (el puntito rojo)
-            if (getActivity() instanceof HomeActivity) {
-                ((HomeActivity) getActivity()).actualizarBadgeNotificaciones();
+            // 2. LÓGICA DE REDIRECCIÓN
+            // Consideramos que si origenReferencia es "HORARIO", el referenciaId es un pasajeId
+            if ("HORARIO".equals(notificacion.origenReferencia)) {
+                abrirTicketPorId(notificacion.referenciaId);
+            } else if ("ENCOMIENDA".equals(notificacion.origenReferencia)) {
+                Intent intent = new Intent(requireContext(), TrackingActivity.class);
+                intent.putExtra("ENCOMIENDA_ID", notificacion.referenciaId);
+                startActivity(intent);
+            } else {
+                Toast.makeText(getContext(), "Notificación de tipo desconocido.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void marcarNotificacionComoLeida(NotificacionEntity notificacion) {
+        if (notificacion.leido || getContext() == null) return;
+
+        AppDatabase db = AppDatabase.getDatabase(requireContext());
+        db.notificacionDao().marcarComoLeida(notificacion.id);
+
+        if (getActivity() instanceof HomeActivity) {
+            ((HomeActivity) getActivity()).actualizarBadgeNotificaciones();
+        }
+        // Recargar la lista para que se le quite el fondo azulito
+        cargarNotificaciones();
+    }
+
+    private void abrirTicketPorId(int pasajeId) {
+        if (getContext() == null) return;
+
+        Toast.makeText(getContext(), "Buscando detalles del ticket...", Toast.LENGTH_SHORT).show();
+
+        SharedPreferences prefs = requireContext().getSharedPreferences(LoginActivity.SP_NAME, Context.MODE_PRIVATE);
+        String token = prefs.getString("USER_TOKEN", null);
+
+        if (token == null) {
+            Toast.makeText(getContext(), "Sesión no válida. Por favor, inicie sesión de nuevo.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        ApiService api = ApiClient.getApiService();
+        // Usar el nuevo endpoint para obtener un solo ticket por ID
+        Call<Ticket> call = api.getPasajePorId("JWT " + token, pasajeId);
+
+        call.enqueue(new Callback<Ticket>() {
+            @Override
+            public void onResponse(Call<Ticket> call, Response<Ticket> response) {
+                if (!isAdded()) return;
+
+                if (response.isSuccessful() && response.body() != null) {
+                    Ticket ticketEncontrado = response.body();
+                    Intent intent = new Intent(requireContext(), TicketActivity.class);
+                    intent.putExtra("OBJETO_TICKET", ticketEncontrado);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getContext(), "No se pudo encontrar el ticket.", Toast.LENGTH_SHORT).show();
+                }
             }
 
-            // 3. Recargar la lista para que se le quite el fondo azulito
-            cargarNotificaciones();
-
-            // 4. LÓGICA DE REDIRECCIÓN (Lo que hablamos del horario_id)
-            if ("HORARIO".equals(notificacion.origenReferencia)) {
-                // Aquí podrías abrir DetalleRutaActivity o TicketActivity pasando el ID
-                Toast.makeText(getContext(), "Abriendo viaje ID: " + notificacion.referenciaId, Toast.LENGTH_SHORT).show();
-                // Intent intent = ...
-                // startActivity(intent);
+            @Override
+            public void onFailure(Call<Ticket> call, Throwable t) {
+                if (isAdded()) {
+                    Toast.makeText(getContext(), "Error de conexión. Intente de nuevo.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
     private void cargarNotificaciones() {
         AppDatabase db = AppDatabase.getDatabase(requireContext());
-        // Obtenemos la lista ordenada por fecha
         List<NotificacionEntity> lista = db.notificacionDao().obtenerTodas();
 
         if (lista.isEmpty()) {

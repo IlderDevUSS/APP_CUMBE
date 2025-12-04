@@ -59,4 +59,18 @@ public class Ticket implements Serializable {
     public String getNombres() { return nombres; }
     public String getApellidos() { return apellidos; }
     public String getDni() { return dni; }
+
+    public void setPasajeId(int pasajeId) { this.pasajeId = pasajeId; }
+    public void setTransaccionId(int transaccionId) { this.transaccionId = transaccionId; }
+    public void setOrigen(String origen) { this.origen = origen; }
+    public void setDestino(String destino) { this.destino = destino; }
+    public void setFechaSalida(String fechaSalida) { this.fechaSalida = fechaSalida; }
+    public void setHoraSalida(String horaSalida) { this.horaSalida = horaSalida; }
+    public void setAsiento(int asiento) { this.asiento = asiento; }
+    public void setPrecio(double precio) { this.precio = precio; }
+    public void setEstado(String estado) { this.estado = estado; }
+    public void setServicio(String servicio) { this.servicio = servicio; }
+    public void setNombres(String nombres) { this.nombres = nombres; }
+    public void setApellidos(String apellidos) { this.apellidos = apellidos; }
+    public void setDni(String dni) { this.dni = dni; }
 }

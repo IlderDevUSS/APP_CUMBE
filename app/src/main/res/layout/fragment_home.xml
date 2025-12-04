@@ -150,7 +150,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_arrow_forward"
-                    app:tint="@color/gris2"/>
+                    app:tint="@color/Textos_normal_second"/>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 

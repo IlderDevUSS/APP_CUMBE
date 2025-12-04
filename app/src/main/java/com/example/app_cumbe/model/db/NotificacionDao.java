@@ -33,7 +33,8 @@ public interface NotificacionDao {
     @Query("SELECT COUNT(*) FROM notificaciones WHERE referenciaId = :refId AND origenReferencia = :tipoRef")
     int existeNotificacion(int refId, String tipoRef);
 
-    @Query("SELECT COUNT(*) FROM notificaciones WHERE referenciaId = :refId AND origenReferencia = :tipoRef AND titulo LIKE :filtroTitulo")
-    int existeNotificacionEspecifica(int refId, String tipoRef, String filtroTitulo);
+    // y una palabra clave en el contenido o título para distinguir (ej: "mañana", "pronto", "camino", "destino")
+    @Query("SELECT COUNT(*) FROM notificaciones WHERE referenciaId = :refId AND origenReferencia = :origenRef AND (contenido LIKE :palabraClave OR titulo LIKE :palabraClave)")
+    int existeNotificacionEspecifica(int refId, String origenRef, String palabraClave);
 
 }

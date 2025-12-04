@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">APP_Cumbe</string>
-    <string name="no_pending_tickets_title">No tienes ningún ticket pendiente.</string>
+    <string name="app_name">El Cumbe</string>
+    <string name="no_pending_tickets_title">No tienes ningún ticket.</string>
     <string name="no_pending_tickets_message">¡Explora nuestros destinos y planifica tu próximo viaje!</string>
 </resources>
