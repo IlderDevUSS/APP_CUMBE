@@ -55,18 +55,20 @@
         android:text="Bienvenido al apartado de encomiendas" />
     <TextView
         android:id="@+id/tvUserDni"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
         android:justificationMode="inter_word"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-        android:textColor="@color/gris1"
+        android:textColor="@color/Textos_normal_second"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvFraseBienvenida"
-        tools:text="[DNI Usuario]" />
+        tools:text="En este apartado puedes visualizar todas las encomiendas enviadas o por recibir con el DNI [DNI del usuario]" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"

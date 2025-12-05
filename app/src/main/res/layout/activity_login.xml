@@ -92,15 +92,16 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnIngresar"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginTop="30dp"
-        android:background="@drawable/bg_gradiant_nav"
         android:text="Ingresar"
+        android:textColor="@color/white"
         android:textSize="18sp"
-        app:backgroundTint="@null"
+        app:backgroundTint="@color/Textos_destacado"
+        app:cornerRadius="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tilPassword" />

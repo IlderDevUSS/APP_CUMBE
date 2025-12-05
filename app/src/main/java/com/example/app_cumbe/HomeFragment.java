@@ -24,6 +24,7 @@ import com.example.app_cumbe.databinding.FragmentHomeBinding;
 import com.example.app_cumbe.databinding.ItemPromoBannerBinding;
 import com.example.app_cumbe.model.ResponseProximoViaje;
 import com.example.app_cumbe.model.RutaConductor;
+import com.example.app_cumbe.model.db.AppDatabase;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import retrofit2.Call;
@@ -77,15 +78,30 @@ public class HomeFragment extends Fragment {
         String primerNombre = userName.split(" ")[0];
         binding.tvWelcomeName.setText("Hola, " + primerNombre);
 
-        binding.ivLogout.setOnClickListener(v -> {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.clear();
-            editor.apply();
+        binding.ivLogout.setOnClickListener(v -> cerrarSesion());
+    }
 
-            Intent intent = new Intent(getActivity(), LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-        });
+    private void cerrarSesion() {
+        if (getContext() == null) return;
+        final Context appContext = getContext().getApplicationContext();
+
+        new Thread(() -> {
+            AppDatabase db = AppDatabase.getDatabase(appContext);
+            db.notificacionDao().borrarTodas();
+
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(() -> {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.clear();
+                    editor.apply();
+
+                    Intent intent = new Intent(appContext, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    getActivity().finish();
+                });
+            }
+        }).start();
     }
 
     private void setupDriverSwitch() {

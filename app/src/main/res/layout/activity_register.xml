@@ -32,7 +32,7 @@
             <ImageView
                 android:id="@+id/imgLogo"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
+                android:layout_height="220dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:src="@drawable/logocumbe2"
@@ -241,13 +241,12 @@
                 android:id="@+id/btnRegistrarse"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:background="@drawable/bg_gradiant_nav"
                 android:text="Registrarme"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                app:backgroundTint="@null"/>
+                app:backgroundTint="@color/Textos_destacado"
+                app:cornerRadius="12dp"/>
 
         </LinearLayout>
     </ScrollView>

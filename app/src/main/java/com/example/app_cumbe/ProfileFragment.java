@@ -1,5 +1,6 @@
 package com.example.app_cumbe;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.app_cumbe.databinding.FragmentProfileBinding;
+import com.example.app_cumbe.model.db.AppDatabase;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.example.app_cumbe.LoginActivity.SP_NAME;
@@ -48,7 +50,6 @@ public class ProfileFragment extends Fragment {
 
 
         binding.tvProfileNameHeader.setText(name);
-        //Comprobamos que tipo de usuario es, si el tipo es CONDUCTOR, le asignamos Conductor, si es CLIENTE, cliente
         if (tipo_usuario.equals("CONDUCTOR")) {
             binding.tvProfileTipo.setText("Conductor");
         } else if (tipo_usuario.equals("CLIENTE")) {
@@ -78,14 +79,31 @@ public class ProfileFragment extends Fragment {
     }
 
     private void cerrarSesion() {
-        SharedPreferences sharedPreferences = requireContext().getSharedPreferences(SP_NAME, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
+        // Para evitar memory leaks, usamos el contexto de la aplicación que vive más tiempo
+        final Context appContext = requireContext().getApplicationContext();
 
-        Intent intent = new Intent(requireContext(), LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        requireActivity().finish();
+        // Ejecutamos la operación de base de datos en un hilo separado
+        new Thread(() -> {
+            // 1. Limpiar la base de datos de notificaciones
+            AppDatabase db = AppDatabase.getDatabase(appContext);
+            db.notificacionDao().borrarTodas();
+
+            // 2. Una vez terminado, volvemos al hilo principal para la UI y navegación
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(() -> {
+                    // Limpiar las preferencias de usuario
+                    SharedPreferences sharedPreferences = appContext.getSharedPreferences(SP_NAME, MODE_PRIVATE);
+                    sharedPreferences.edit().clear().apply();
+
+                    // Redirigir al Login
+                    Intent intent = new Intent(appContext, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+
+                    // Finalizar la actividad actual
+                    getActivity().finish();
+                });
+            }
+        }).start();
     }
 }

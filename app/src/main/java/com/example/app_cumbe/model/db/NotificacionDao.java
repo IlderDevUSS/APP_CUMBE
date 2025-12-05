@@ -37,4 +37,8 @@ public interface NotificacionDao {
     @Query("SELECT COUNT(*) FROM notificaciones WHERE referenciaId = :refId AND origenReferencia = :origenRef AND (contenido LIKE :palabraClave OR titulo LIKE :palabraClave)")
     int existeNotificacionEspecifica(int refId, String origenRef, String palabraClave);
 
+    // --- NUEVO MÉTODO ---
+    // Borrar todas las notificaciones de la tabla
+    @Query("DELETE FROM notificaciones")
+    void borrarTodas();
 }

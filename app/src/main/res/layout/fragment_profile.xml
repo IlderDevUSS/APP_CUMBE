@@ -99,7 +99,7 @@
                 android:text="Editar Mis Datos"
                 android:textColor="@color/white"
                 android:textSize="16sp"
-                app:backgroundTint="@color/color_iconos"
+                app:backgroundTint="@color/Textos_destacado"
                 app:cornerRadius="12dp"
                 android:layout_marginTop="32dp"
                 style="@style/Widget.MaterialComponents.Button"/>
