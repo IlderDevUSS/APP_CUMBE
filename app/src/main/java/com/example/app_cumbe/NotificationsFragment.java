@@ -56,7 +56,6 @@ public class NotificationsFragment extends Fragment {
         tvEmpty = view.findViewById(R.id.tvEmptyNotifications);
 
         setupRecyclerView();
-        cargarNotificaciones();
     }
 
     private void setupRecyclerView() {
@@ -138,8 +137,20 @@ public class NotificationsFragment extends Fragment {
     }
 
     private void cargarNotificaciones() {
+        if (getContext() == null) return;
+
+        SharedPreferences prefs = requireContext().getSharedPreferences(LoginActivity.SP_NAME, Context.MODE_PRIVATE);
+        String userId = prefs.getString("USER_DNI", null);
+
+        if (userId == null) {
+            tvEmpty.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+            adapter.setData(new ArrayList<>()); // Limpiar lista
+            return;
+        }
+
         AppDatabase db = AppDatabase.getDatabase(requireContext());
-        List<NotificacionEntity> lista = db.notificacionDao().obtenerTodas();
+        List<NotificacionEntity> lista = db.notificacionDao().obtenerPorUsuario(userId);
 
         if (lista.isEmpty()) {
             tvEmpty.setVisibility(View.VISIBLE);

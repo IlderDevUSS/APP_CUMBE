@@ -104,7 +104,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Brindar un servicio de transporte interprovincial seguro, puntual y de calidad, conectando a las familias peruanas."
+                        android:text="Conectamos destinos con la seguridad y puntualidad que mereces. Ofrecemos una experiencia de viaje cómoda y confiable en nuestras rutas principales. Planifica tu viaje con anticipación a través de nuestra plataforma y disfruta de un servicio de transporte de primera clase."
                         android:textColor="@color/Textos_normal"
                         android:lineSpacingExtra="4dp"/>
                 </LinearLayout>
@@ -150,7 +150,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Ser la empresa líder en transporte terrestre en el norte del país, reconocida por nuestra innovación y compromiso con el cliente."
+                        android:text="Tus envíos, en las mejores manos. Garantizamos el traslado seguro de tus encomiendas con un monitoreo constante desde la recepción hasta la entrega final. Confía en nuestra logística eficiente para que tus paquetes lleguen a tiempo y en perfectas condiciones."
                         android:textColor="@color/Textos_normal"
                         android:lineSpacingExtra="4dp"/>
                 </LinearLayout>

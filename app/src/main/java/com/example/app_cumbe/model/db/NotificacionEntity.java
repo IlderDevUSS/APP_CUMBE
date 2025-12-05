@@ -13,6 +13,7 @@ public class NotificacionEntity {
     public String contenido;
     public String fecha; // Guardaremos fecha como String o Long
     public String tipo;  // "SISTEMA", "ENCOMIENDA", "VIAJE"
+    public String userId;
 
     public boolean leido; // true = ya se vio, false = activa el puntito rojo
 
@@ -24,11 +25,12 @@ public class NotificacionEntity {
     public NotificacionEntity() {}
 
     // Constructor útil para crear nuevas
-    public NotificacionEntity(String titulo, String contenido, String tipo, String fecha) {
+    public NotificacionEntity(String titulo, String contenido, String tipo, String fecha, String userId) {
         this.titulo = titulo;
         this.contenido = contenido;
         this.tipo = tipo;
         this.fecha = fecha;
         this.leido = false; // Por defecto nace no leída
+        this.userId = userId;
     }
 }

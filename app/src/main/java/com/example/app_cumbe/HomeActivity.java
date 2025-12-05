@@ -21,12 +21,14 @@ import android.widget.Toast;
 import com.example.app_cumbe.api.ApiClient;
 import com.example.app_cumbe.databinding.ActivityHomeBinding;
 import com.example.app_cumbe.model.db.AppDatabase;
+import com.example.app_cumbe.model.db.NotificacionEntity;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 import static com.example.app_cumbe.LoginActivity.SP_NAME;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class HomeActivity extends AppCompatActivity {
@@ -87,7 +89,7 @@ public class HomeActivity extends AppCompatActivity {
 
                 } else if (itemId == R.id.navigation_notifications) {
                     loadFragment(notificationsFragment);
-                    limpiarBadgeNotificaciones();
+                    marcarNotificacionesComoLeidas();
                     return true;
                 } else if (itemId == R.id.navigation_profile) {
                     loadFragment(profileFragment);
@@ -125,8 +127,16 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void actualizarBadgeNotificaciones() {
+        SharedPreferences prefs = getSharedPreferences(SP_NAME, MODE_PRIVATE);
+        String userId = prefs.getString("USER_DNI", null);
+
+        if (userId == null) {
+            limpiarBadgeNotificaciones();
+            return;
+        }
+
         AppDatabase db = AppDatabase.getDatabase(this);
-        int noLeidas = db.notificacionDao().contarNoLeidas();
+        int noLeidas = db.notificacionDao().contarNoLeidas(userId);
 
         // Cuidado: getOrCreateBadge usa el ID del menú
         BadgeDrawable badge = binding.bottomNavigation.getOrCreateBadge(R.id.navigation_notifications);
@@ -138,6 +148,26 @@ public class HomeActivity extends AppCompatActivity {
         } else {
             badge.setVisible(false);
         }
+    }
+
+    private void marcarNotificacionesComoLeidas() {
+        SharedPreferences prefs = getSharedPreferences(SP_NAME, MODE_PRIVATE);
+        String userId = prefs.getString("USER_DNI", null);
+
+        if (userId == null) {
+            return;
+        }
+
+        AppDatabase db = AppDatabase.getDatabase(this);
+        List<NotificacionEntity> notificaciones = db.notificacionDao().obtenerPorUsuario(userId);
+
+        for (com.example.app_cumbe.model.db.NotificacionEntity notificacion : notificaciones) {
+            if (!notificacion.leido) {
+                db.notificacionDao().marcarComoLeida(notificacion.id);
+            }
+        }
+
+        actualizarBadgeNotificaciones();
     }
 
     private void limpiarBadgeNotificaciones() {

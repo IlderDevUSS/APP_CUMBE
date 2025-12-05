@@ -57,8 +57,9 @@ public class NotificationsWorker extends Worker {
         Context context = getApplicationContext();
         SharedPreferences prefs = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
         String token = prefs.getString("USER_TOKEN", null);
+        String userId = prefs.getString("USER_DNI", null);
 
-        if (token == null) return;
+        if (token == null || userId == null) return;
 
         ApiService api = ApiClient.getApiService();
         try {
@@ -74,19 +75,19 @@ public class NotificationsWorker extends Worker {
 
                     // CASO 1: Faltan 24 horas o menos
                     if (horasRestantes > 1 && horasRestantes <= 24) {
-                        if (!yaFueNotificado(db, t.getPasajeId(), "HORARIO", "%mañana%")) {
+                        if (!yaFueNotificado(db, t.getPasajeId(), "HORARIO", "%mañana%", userId)) {
                             // CORRECCIÓN: Usamos el ID del pasaje, no el objeto Ticket
                             crearNotificacion(db, t.getPasajeId(), "VIAJE", "Tu viaje es mañana",
-                                    "Recuerda que tu viaje a " + t.getDestino() + " sale mañana a las " + t.getHoraSalida());
+                                    "Recuerda que tu viaje a " + t.getDestino() + " sale mañana a las " + t.getHoraSalida(), userId);
                         }
                     }
 
                     // CASO 2: Falta 1 hora o menos
                     else if (horasRestantes >= 0 && horasRestantes <= 1) {
-                        if (!yaFueNotificado(db, t.getPasajeId(), "HORARIO", "%pronto%")) {
+                        if (!yaFueNotificado(db, t.getPasajeId(), "HORARIO", "%pronto%", userId)) {
                             // CORRECCIÓN: Usamos el ID del pasaje, no el objeto Ticket
                             crearNotificacion(db, t.getPasajeId(), "VIAJE", "¡Tu viaje es pronto!",
-                                    "Falta menos de 1 hora para tu salida a " + t.getDestino() + ". ¡No llegues tarde!");
+                                    "Falta menos de 1 hora para tu salida a " + t.getDestino() + ". ¡No llegues tarde!", userId);
                         }
                     }
                 }
@@ -117,22 +118,22 @@ public class NotificationsWorker extends Worker {
 
                     // CASO A: Encomienda EN CAMINO
                     if ("EN_CAMINO".equalsIgnoreCase(estado)) {
-                        if (!yaFueNotificado(db, e.getId(), "ENCOMIENDA", "%camino%")) {
+                        if (!yaFueNotificado(db, e.getId(), "ENCOMIENDA", "%camino%", miDni)) {
                             String msg = "Tu encomienda con código " + e.getTrackingCode() + " está en ruta hacia " + e.getNombreDestino();
-                            crearNotificacion(db, e.getId(), "ENCOMIENDA", "📦 Encomienda en Camino", msg);
+                            crearNotificacion(db, e.getId(), "ENCOMIENDA", "📦 Encomienda en Camino", msg, miDni);
                         }
                     }
 
                     // CASO B: Encomienda EN DESTINO
                     else if ("EN_DESTINO".equalsIgnoreCase(estado)) {
-                        if (!yaFueNotificado(db, e.getId(), "ENCOMIENDA", "%destino%")) {
+                        if (!yaFueNotificado(db, e.getId(), "ENCOMIENDA", "%destino%", miDni)) {
                             String msg;
                             if (e.getDestinatarioDni() != null && e.getDestinatarioDni().equals(miDni)) {
                                 msg = "¡Llegó! Tu encomienda " + e.getTrackingCode() + " está lista para recoger en " + e.getNombreDestino();
                             } else {
                                 msg = "La encomienda que enviaste (" + e.getTrackingCode() + ") ya llegó a su destino.";
                             }
-                            crearNotificacion(db, e.getId(), "ENCOMIENDA", "✅ Encomienda en Destino", msg);
+                            crearNotificacion(db, e.getId(), "ENCOMIENDA", "✅ Encomienda en Destino", msg, miDni);
                         }
                     }
                 }
@@ -144,9 +145,9 @@ public class NotificationsWorker extends Worker {
 
     // --- MÉTODO UNIFICADO PARA CREAR Y MOSTRAR ---
     // Este es el método que causaba conflicto. Ahora está estandarizado.
-    private void crearNotificacion(AppDatabase db, int refId, String tipoRef, String titulo, String mensaje) {
+    private void crearNotificacion(AppDatabase db, int refId, String tipoRef, String titulo, String mensaje, String userId) {
         // 1. Insertar en Room
-        NotificacionEntity notif = new NotificacionEntity(titulo, mensaje, tipoRef, getCurrentDateStr());
+        NotificacionEntity notif = new NotificacionEntity(titulo, mensaje, tipoRef, getCurrentDateStr(), userId);
         notif.referenciaId = refId;
         notif.origenReferencia = tipoRef.equals("VIAJE") ? "HORARIO" : "ENCOMIENDA";
         db.notificacionDao().insertar(notif);
@@ -227,9 +228,9 @@ public class NotificationsWorker extends Worker {
         }
     }
 
-    private boolean yaFueNotificado(AppDatabase db, int refId, String origenRef, String palabraClave) {
+        private boolean yaFueNotificado(AppDatabase db, int refId, String origenRef, String palabraClave, String userId) {
         // Usamos el DAO actualizado que creamos antes
-        return db.notificacionDao().existeNotificacionEspecifica(refId, origenRef, palabraClave) > 0;
+        return db.notificacionDao().existeNotificacionEspecifica(refId, origenRef, palabraClave, userId) > 0;
     }
 
     private String getCurrentDateStr() {

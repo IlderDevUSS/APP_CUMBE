@@ -85,23 +85,16 @@ public class HomeFragment extends Fragment {
         if (getContext() == null) return;
         final Context appContext = getContext().getApplicationContext();
 
-        new Thread(() -> {
-            AppDatabase db = AppDatabase.getDatabase(appContext);
-            db.notificacionDao().borrarTodas();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
 
-            if (getActivity() != null) {
-                getActivity().runOnUiThread(() -> {
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.clear();
-                    editor.apply();
-
-                    Intent intent = new Intent(appContext, LoginActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    getActivity().finish();
-                });
-            }
-        }).start();
+        Intent intent = new Intent(appContext, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        if (getActivity()!= null) {
+            getActivity().finish();
+        }
     }
 
     private void setupDriverSwitch() {
@@ -335,9 +328,9 @@ public class HomeFragment extends Fragment {
 
     private void setupPromoCarousel() {
         List<Integer> promoImages = Arrays.asList(
-                R.drawable.prom_1,
-                R.drawable.bus_2,
-                R.drawable.bus_3
+                R.drawable.prom_2,
+                R.drawable.prom_3,
+                R.drawable.prom_4
         );
         PromoAdapter adapter = new PromoAdapter(promoImages);
         binding.vpPromos.setAdapter(adapter);

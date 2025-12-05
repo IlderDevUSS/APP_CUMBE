@@ -82,28 +82,18 @@ public class ProfileFragment extends Fragment {
         // Para evitar memory leaks, usamos el contexto de la aplicación que vive más tiempo
         final Context appContext = requireContext().getApplicationContext();
 
-        // Ejecutamos la operación de base de datos en un hilo separado
-        new Thread(() -> {
-            // 1. Limpiar la base de datos de notificaciones
-            AppDatabase db = AppDatabase.getDatabase(appContext);
-            db.notificacionDao().borrarTodas();
+        // Limpiar las preferencias de usuario
+        SharedPreferences sharedPreferences = appContext.getSharedPreferences(SP_NAME, MODE_PRIVATE);
+        sharedPreferences.edit().clear().apply();
 
-            // 2. Una vez terminado, volvemos al hilo principal para la UI y navegación
-            if (getActivity() != null) {
-                getActivity().runOnUiThread(() -> {
-                    // Limpiar las preferencias de usuario
-                    SharedPreferences sharedPreferences = appContext.getSharedPreferences(SP_NAME, MODE_PRIVATE);
-                    sharedPreferences.edit().clear().apply();
+        // Redirigir al Login
+        Intent intent = new Intent(appContext, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
 
-                    // Redirigir al Login
-                    Intent intent = new Intent(appContext, LoginActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-
-                    // Finalizar la actividad actual
-                    getActivity().finish();
-                });
-            }
-        }).start();
+        // Finalizar la actividad actual
+        if (getActivity() != null) {
+            getActivity().finish();
+        }
     }
 }

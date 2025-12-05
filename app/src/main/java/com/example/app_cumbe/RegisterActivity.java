@@ -149,8 +149,9 @@ public class RegisterActivity extends AppCompatActivity {
         String fecha = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(new Date());
 
         // 1. Guardar en la base de datos local
+        String userId = binding.etDni.getText().toString().trim();
         AppDatabase db = AppDatabase.getDatabase(this);
-        NotificacionEntity notificacionLocal = new NotificacionEntity(titulo, contenido, "SISTEMA", fecha);
+        NotificacionEntity notificacionLocal = new NotificacionEntity(titulo, contenido, "SISTEMA", fecha, userId);
         // No tiene ID de referencia, así que no se establece
         db.notificacionDao().insertar(notificacionLocal);
 

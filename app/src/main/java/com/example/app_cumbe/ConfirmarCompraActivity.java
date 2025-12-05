@@ -204,12 +204,14 @@ public class ConfirmarCompraActivity extends AppCompatActivity {
                     intent.putExtra("PASAJERO_CELULAR", cel);
 
                         // --- NUEVO: Crear Notificación Local ---
+                    String userId = getSharedPreferences(SP_NAME, MODE_PRIVATE).getString("USER_DNI", null);
                     AppDatabase db = AppDatabase.getDatabase(ConfirmarCompraActivity.this);
                         NotificacionEntity notifCompra = new NotificacionEntity(
                                 "Compra Exitosa",
                                 "Has comprado tu pasaje a " + rutaStr + " correctamente. Asiento: " + asiento,
                                 "COMPRA",
-                                new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(new Date())
+                                new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(new Date()),
+                                userId
                         );
                         notifCompra.referenciaId = response.body().getPasajeId();
                         notifCompra.origenReferencia = "HORARIO";

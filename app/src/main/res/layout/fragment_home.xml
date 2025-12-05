@@ -495,13 +495,13 @@
         <View
             android:id="@+id/footerTopBorder"
             android:layout_width="match_parent"
-            android:layout_height="10dp"
+            android:layout_height="5dp"
             android:background="@color/Textos_destacado"/>
 
         <View
             android:id="@+id/footerView"
             android:layout_width="match_parent"
-            android:layout_height="155dp"
+            android:layout_height="200dp"
             android:background="@drawable/footer1"/>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
