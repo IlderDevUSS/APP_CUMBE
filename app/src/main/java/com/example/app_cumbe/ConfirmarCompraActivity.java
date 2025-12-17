@@ -1,11 +1,25 @@
 package com.example.app_cumbe;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.CompoundButton;
 import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.app_cumbe.api.ApiClient;
 import com.example.app_cumbe.api.ApiService;
@@ -15,15 +29,15 @@ import com.example.app_cumbe.model.ResponseCompra;
 import com.example.app_cumbe.model.db.AppDatabase;
 import com.example.app_cumbe.model.db.NotificacionEntity;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.example.app_cumbe.LoginActivity.SP_NAME;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 public class ConfirmarCompraActivity extends AppCompatActivity {
 
@@ -38,6 +52,27 @@ public class ConfirmarCompraActivity extends AppCompatActivity {
     private String servicioBus = "";
     private String misNombres, misApellidos, miDni, miCelular;
 
+    // --- INICIO: PERMISOS NOTIFICACIÓN ---
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    // El permiso fue concedido. Puedes mostrar notificaciones.
+                } else {
+                    Toast.makeText(this, "No se podrán mostrar notificaciones de la compra.", Toast.LENGTH_LONG).show();
+                }
+            });
+
+    private void askNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=
+                    PackageManager.PERMISSION_GRANTED) {
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+            }
+        }
+    }
+    // --- FIN: PERMISOS NOTIFICACIÓN ---
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +85,7 @@ public class ConfirmarCompraActivity extends AppCompatActivity {
         cargarDatosUsuarioSesion();
         setupUI();
         setupListeners();
+        askNotificationPermission(); // Pedir permiso al crear la actividad
     }
 
     private void recibirDatosIntent() {
@@ -78,7 +114,7 @@ public class ConfirmarCompraActivity extends AppCompatActivity {
             // Ejemplo: "Juan Carlos" "Perez Lopez"
             misNombres = partes[0] + " " + partes[1];
             misApellidos = "";
-            for(int k=2; k<partes.length; k++) misApellidos += partes[k] + " ";
+            for (int k = 2; k < partes.length; k++) misApellidos += partes[k] + " ";
         } else if (partes.length == 2) {
             misNombres = partes[0];
             misApellidos = partes[1];
@@ -191,32 +227,40 @@ public class ConfirmarCompraActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseCompra> call, Response<ResponseCompra> response) {
                 if (response.isSuccessful() && response.body() != null) {
+                    ResponseCompra body = response.body();
+
                     Intent intent = new Intent(ConfirmarCompraActivity.this, TicketActivity.class);
-                    intent.putExtra("PASAJE_ID", response.body().getPasajeId());
-                    intent.putExtra("TRANSACCION_ID", response.body().getTransaccionId());
+                    intent.putExtra("PASAJE_ID", body.getPasajeId());
+                    intent.putExtra("TRANSACCION_ID", body.getTransaccionId());
                     intent.putExtra("RUTA", rutaStr);
                     intent.putExtra("FECHA", fechaStr);
                     intent.putExtra("ASIENTO", asiento);
                     intent.putExtra("PRECIO", precio);
-                    intent.putExtra("PASAJERO_NOMBRE", nom+ " " + ape);
+                    intent.putExtra("PASAJERO_NOMBRE", nom + " " + ape);
                     intent.putExtra("PASAJERO_DNI", dni);
                     intent.putExtra("SERVICIO", servicioBus);
                     intent.putExtra("PASAJERO_CELULAR", cel);
 
-                        // --- NUEVO: Crear Notificación Local ---
+                    String notifTitle = "Compra Exitosa";
+                    String notifMessage = "Has comprado tu pasaje a " + rutaStr + " correctamente. Asiento: " + asiento;
+
+                    // ---  Crear Notificación Local ---
                     String userId = getSharedPreferences(SP_NAME, MODE_PRIVATE).getString("USER_DNI", null);
                     AppDatabase db = AppDatabase.getDatabase(ConfirmarCompraActivity.this);
-                        NotificacionEntity notifCompra = new NotificacionEntity(
-                                "Compra Exitosa",
-                                "Has comprado tu pasaje a " + rutaStr + " correctamente. Asiento: " + asiento,
-                                "COMPRA",
-                                new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(new Date()),
-                                userId
-                        );
-                        notifCompra.referenciaId = response.body().getPasajeId();
-                        notifCompra.origenReferencia = "HORARIO";
-                        db.notificacionDao().insertar(notifCompra);
-                        // ---------------------------------------
+                    NotificacionEntity notifCompra = new NotificacionEntity(
+                            notifTitle,
+                            notifMessage,
+                            "COMPRA",
+                            new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(new Date()),
+                            userId
+                    );
+                    notifCompra.referenciaId = body.getPasajeId();
+                    notifCompra.origenReferencia = "HORARIO";
+                    db.notificacionDao().insertar(notifCompra);
+
+                    // --- Mostrar Notificación Push ---
+                    mostrarNotificacionSistema(body.getPasajeId(), notifTitle, notifMessage);
+
 
                     startActivity(intent);
                     finish();
@@ -234,5 +278,40 @@ public class ConfirmarCompraActivity extends AppCompatActivity {
                 Toast.makeText(ConfirmarCompraActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void mostrarNotificacionSistema(int pasajeId, String titulo, String mensaje) {
+        Context context = getApplicationContext();
+        String channelId = "canal_compras"; // Canal distinto para compras
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(channelId, "Confirmación de Compra", NotificationManager.IMPORTANCE_DEFAULT);
+            context.getSystemService(NotificationManager.class).createNotificationChannel(channel);
+        }
+
+        Intent intent = new Intent(context, TicketActivity.class);
+        intent.putExtra("PASAJE_ID", pasajeId);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                context,
+                pasajeId, // Usamos el ID del pasaje como Request Code para que sea único
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
+                .setSmallIcon(R.drawable.ic_local_activity)
+                .setContentTitle(titulo)
+                .setContentText(mensaje)
+                .setContentIntent(pendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            // El permiso ya se pidió al inicio. Si no lo tenemos, no hacemos nada.
+            return;
+        }
+        NotificationManagerCompat.from(context).notify(pasajeId, builder.build());
     }
 }
