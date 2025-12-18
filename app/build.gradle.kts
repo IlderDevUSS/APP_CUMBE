@@ -26,12 +26,13 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures {
         viewBinding = true
     }
+
 }
 
 dependencies {
@@ -39,7 +40,7 @@ dependencies {
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
     implementation("androidx.work:work-runtime:2.9.0")
-
+    implementation("com.mercadopago.android.px:checkout:4.53.2")
 
     implementation(libs.appcompat)
     implementation(libs.material)
@@ -50,4 +51,5 @@ dependencies {
     implementation("androidx.gridlayout:gridlayout:1.0.0")
     implementation("com.squareup.retrofit2:retrofit:2.8.0")
     implementation("com.squareup.retrofit2:converter-gson:2.8.0")
+
 }

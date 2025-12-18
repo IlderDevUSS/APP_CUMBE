@@ -32,7 +32,13 @@ public class RequestCompra {
     @SerializedName("metodo_pago")
     private String metodoPago;
 
-    // Constructor actualizado
+    @SerializedName("id_transaccion_externa")
+    private String idTransaccionExterna;
+
+    @SerializedName("detalle_estado")
+    private String detalleEstado;
+
+    // Constructor para cuando se crea el objeto antes de tener los datos de pago online
     public RequestCompra(int horarioId, int numeroAsiento, int piso, double precio,
                          String nombres, String apellidos, String dni, String celular, String metodoPago) {
         this.horarioId = horarioId;
@@ -44,5 +50,32 @@ public class RequestCompra {
         this.dni = dni;
         this.celular = celular;
         this.metodoPago = metodoPago;
+        this.idTransaccionExterna = null; // Se setea después
+        this.detalleEstado = null;      // Se setea después
+    }
+
+    // Constructor actualizado
+    public RequestCompra(int horarioId, int numeroAsiento, int piso, double precio,
+                         String nombres, String apellidos, String dni, String celular, String metodoPago, String idTransaccionExterna, String detalleEstado) {
+        this.horarioId = horarioId;
+        this.numeroAsiento = numeroAsiento;
+        this.piso = piso;
+        this.precio = precio;
+        this.nombres = nombres;
+        this.apellidos = apellidos;
+        this.dni = dni;
+        this.celular = celular;
+        this.metodoPago = metodoPago;
+        this.idTransaccionExterna = idTransaccionExterna;
+        this.detalleEstado = detalleEstado;
+    }
+
+    // Setters para los campos que se actualizan después de la creación
+    public void setIdTransaccionExterna(String idTransaccionExterna) {
+        this.idTransaccionExterna = idTransaccionExterna;
+    }
+
+    public void setDetalleEstado(String detalleEstado) {
+        this.detalleEstado = detalleEstado;
     }
 }

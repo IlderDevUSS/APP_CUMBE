@@ -4,8 +4,10 @@ package com.example.app_cumbe.api;
 import com.example.app_cumbe.model.AsientoOcupado;
 import com.example.app_cumbe.model.Horario;
 import com.example.app_cumbe.model.RequestCompra;
+import com.example.app_cumbe.model.RequestPreferencia;
 import com.example.app_cumbe.model.RequestRegister;
 import com.example.app_cumbe.model.ResponseCompra;
+import com.example.app_cumbe.model.ResponsePreferencia;
 import com.example.app_cumbe.model.ResponseRefresh;
 import com.example.app_cumbe.model.ResponseRegister;
 import com.example.app_cumbe.model.RequestLogin;
@@ -105,4 +107,7 @@ public interface ApiService {
 
     @GET("api/pasajes/{id}")
     Call<Ticket> getPasajePorId(@Header("Authorization") String token, @Path("id") int pasajeId);
+
+    @POST("api/pagos/crear_preferencia")
+    Call<ResponsePreferencia> crearPreferencia(@Header("Authorization") String token, @Body RequestPreferencia request);
 }
