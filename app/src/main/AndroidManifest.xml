@@ -66,10 +66,18 @@
             android:exported="false"
             android:theme="@style/Theme.APP_Cumbe.NoActionBar" />
 
+
         <activity
             android:name=".ConfirmarCompraActivity"
-            android:exported="false"
-            android:theme="@style/Theme.APP_Cumbe.NoActionBar" />
+            android:exported="true"
+            android:launchMode="singleTop"> <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="appcumbe" android:host="checkout" />
+        </intent-filter>
+        </activity>
+
         <activity
             android:name=".TicketActivity"
             android:exported="false"

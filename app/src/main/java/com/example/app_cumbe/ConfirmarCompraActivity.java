@@ -231,7 +231,7 @@ public class ConfirmarCompraActivity extends AppCompatActivity {
         // 3. Decidir flujo según método de pago
         int selectedId = binding.rgMetodoPago.getCheckedRadioButtonId();
 
-        if (selectedId == R.id.rbTarjeta || selectedId == R.id.rbYape) {
+        if (selectedId == R.id.rbTarjeta) {
             // CASO A: Pago ONLINE (Web Checkout)
             iniciarFlujoMercadoPago();
         } else {

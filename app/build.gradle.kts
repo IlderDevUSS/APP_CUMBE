@@ -41,6 +41,7 @@ dependencies {
     annotationProcessor("androidx.room:room-compiler:$room_version")
     implementation("androidx.work:work-runtime:2.9.0")
     implementation("com.mercadopago.android.px:checkout:4.53.2")
+    implementation("androidx.browser:browser:1.4.0")
 
     implementation(libs.appcompat)
     implementation(libs.material)

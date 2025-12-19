@@ -15,8 +15,12 @@ public class ResponseCompra {
     @SerializedName("error")
     private String error;
 
+
+    @SerializedName("id_ticket_visual")
+    private String idTicketVisual;
     public String getMensaje() { return mensaje; }
     public int getPasajeId() { return pasajeId; }
     public int getTransaccionId() { return transaccionId; }
     public String getError() { return error; }
+    public String getIdTicketVisual() { return idTicketVisual; }
 }
