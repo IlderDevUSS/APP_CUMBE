@@ -211,20 +211,10 @@
             android:layout_marginBottom="24dp">
 
             <RadioButton
-                android:id="@+id/rbYape"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Yape (Simulado)"
-                android:padding="12dp"
-                android:background="@drawable/bg_input_cumbe"
-                android:layout_marginBottom="8dp"
-                android:buttonTint="@color/color_principal_cumbe"/>
-
-            <RadioButton
                 android:id="@+id/rbTarjeta"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Tarjeta Débito/Crédito"
+                android:text="Pago Online (Mercado Pago)"
                 android:padding="12dp"
                 android:background="@drawable/bg_input_cumbe"
                 android:layout_marginBottom="8dp"

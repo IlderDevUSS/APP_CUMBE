@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -21,7 +22,6 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.app_cumbe.api.ApiClient;
-import com.example.app_cumbe.api.ApiService;
 import com.example.app_cumbe.databinding.ActivityConfirmarCompraBinding;
 import com.example.app_cumbe.model.RequestCompra;
 import com.example.app_cumbe.model.RequestPreferencia;
@@ -29,8 +29,6 @@ import com.example.app_cumbe.model.ResponseCompra;
 import com.example.app_cumbe.model.ResponsePreferencia;
 import com.example.app_cumbe.model.db.AppDatabase;
 import com.example.app_cumbe.model.db.NotificacionEntity;
-import com.mercadopago.android.px.core.MercadoPagoCheckout;
-import com.mercadopago.android.px.model.Payment;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -43,19 +41,17 @@ import retrofit2.Response;
 import static com.example.app_cumbe.LoginActivity.SP_NAME;
 
 public class ConfirmarCompraActivity extends AppCompatActivity {
-    // LLAVE DE PRUEBAS (Debe empezar con TEST- o ser un APP_USR de prueba)
-    private static final String PUBLIC_KEY = "APP_USR-d9de133d-c9e2-4d94-869c-ee663d6a52cb";
-    private static final int REQUEST_CODE_MERCADO_PAGO = 101;
+
     private ActivityConfirmarCompraBinding binding;
 
     // Datos del viaje
     private int horarioId, asiento, piso;
-    private double precio = 40.00;
+    private double precio = 0.0;
     private String rutaStr = "";
     private String fechaStr = "";
     private String servicioBus = "";
 
-    // Datos del pasajero (temporal para el flujo)
+    // Datos del pasajero
     private String misNombres, misApellidos, miDni, miCelular;
 
     // --- PERMISOS NOTIFICACIÓN ---
@@ -90,6 +86,41 @@ public class ConfirmarCompraActivity extends AppCompatActivity {
         setupUI();
         setupListeners();
         askNotificationPermission();
+
+        // Verificar si la actividad se abrió por un Deep Link (Regreso de Pago)
+        checkPaymentResult(getIntent());
+    }
+
+    // --- NUEVO: Capturar el regreso del Navegador ---
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent); // Actualizar el intent actual
+        checkPaymentResult(intent);
+    }
+
+    // --- NUEVO: Analizar la URL de respuesta ---
+    private void checkPaymentResult(Intent intent) {
+        if (intent == null || intent.getData() == null) return;
+
+        Uri data = intent.getData();
+
+        // Verificamos si es el esquema que configuramos: appcumbe://checkout
+        if ("appcumbe".equals(data.getScheme()) && "checkout".equals(data.getHost())) {
+
+            String path = data.getPath(); // "/success", "/failure" o "/pending"
+            String status = data.getQueryParameter("collection_status");
+            String paymentId = data.getQueryParameter("collection_id");
+
+            if ("/success".equals(path) && "approved".equals(status)) {
+                // ¡PAGO APROBADO! -> Procedemos a guardar en BD
+                procesarCompraFinal(paymentId, status, "MERCADO_PAGO_WEB");
+            } else if ("/failure".equals(path)) {
+                mostrarError("El pago fue rechazado o cancelado.");
+            } else if ("/pending".equals(path)) {
+                mostrarError("El pago está pendiente de confirmación.");
+            }
+        }
     }
 
     private void recibirDatosIntent() {
@@ -97,7 +128,7 @@ public class ConfirmarCompraActivity extends AppCompatActivity {
         horarioId = i.getIntExtra("HORARIO_ID", 0);
         asiento = i.getIntExtra("ASIENTO", 0);
         piso = i.getIntExtra("PISO", 1);
-        if (i.hasExtra("PRECIO")) precio = i.getDoubleExtra("PRECIO", 40.0);
+        if (i.hasExtra("PRECIO")) precio = i.getDoubleExtra("PRECIO", 0.0);
         rutaStr = i.getStringExtra("RUTA");
         if (rutaStr == null) rutaStr = "";
         fechaStr = i.getStringExtra("FECHA");
@@ -191,8 +222,8 @@ public class ConfirmarCompraActivity extends AppCompatActivity {
             return;
         }
 
-        // Guardamos los datos temporalmente para usarlos después del pago
-        this.misNombres = nombres; // Sobrescribimos temporalmente si editó el form
+        // Guardamos los datos temporalmente
+        this.misNombres = nombres;
         this.misApellidos = apellidos;
         this.miDni = dni;
         this.miCelular = celular;
@@ -201,7 +232,7 @@ public class ConfirmarCompraActivity extends AppCompatActivity {
         int selectedId = binding.rgMetodoPago.getCheckedRadioButtonId();
 
         if (selectedId == R.id.rbTarjeta || selectedId == R.id.rbYape) {
-            // CASO A: Pago ONLINE (Mercado Pago)
+            // CASO A: Pago ONLINE (Web Checkout)
             iniciarFlujoMercadoPago();
         } else {
             // CASO B: Pago EFECTIVO (Presencial)
@@ -209,64 +240,53 @@ public class ConfirmarCompraActivity extends AppCompatActivity {
         }
     }
 
-    // --- PASO 1: Obtener Preferencia (Solo para tarjeta/yape) ---
+    // --- MODIFICADO: Iniciar flujo WEB (Chrome) ---
     private void iniciarFlujoMercadoPago() {
         binding.btnPagarFinal.setEnabled(false);
         binding.btnPagarFinal.setText("Cargando Pasarela...");
 
         RequestPreferencia req = new RequestPreferencia("Pasaje a " + rutaStr, precio);
 
-        // Necesitas el token si tu endpoint lo requiere (@jwt_required)
         SharedPreferences prefs = getSharedPreferences(SP_NAME, MODE_PRIVATE);
         String token = prefs.getString("USER_TOKEN", "");
 
         ApiClient.getApiService().crearPreferencia(token, req).enqueue(new Callback<ResponsePreferencia>() {
             @Override
             public void onResponse(Call<ResponsePreferencia> call, Response<ResponsePreferencia> response) {
+                // Reactivamos el botón por si el usuario cancela/regresa
+                binding.btnPagarFinal.setEnabled(true);
+                binding.btnPagarFinal.setText("Confirmar y Pagar");
+
                 if (response.isSuccessful() && response.body() != null) {
-                    // Abrir SDK Mercado Pago
-                    new MercadoPagoCheckout.Builder(PUBLIC_KEY, response.body().getPreferenceId())
-                            .build()
-                            .startPayment(ConfirmarCompraActivity.this, REQUEST_CODE_MERCADO_PAGO);
+                    String urlPago = response.body().getUrlPago();
+
+                    if (urlPago != null && !urlPago.isEmpty()) {
+                        // ABRIR NAVEGADOR
+                        try {
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlPago));
+                            startActivity(browserIntent);
+                            Toast.makeText(ConfirmarCompraActivity.this, "Redirigiendo a Mercado Pago...", Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            mostrarError("Error al abrir navegador: " + e.getMessage());
+                        }
+                    } else {
+                        mostrarError("Error: El servidor no devolvió el link de pago.");
+                    }
                 } else {
-                    mostrarError("Error al iniciar pago: " + response.code());
+                    mostrarError("Error del servidor: " + response.code());
                 }
             }
+
             @Override
             public void onFailure(Call<ResponsePreferencia> call, Throwable t) {
-                mostrarError("Error de conexión con servidor");
+                binding.btnPagarFinal.setEnabled(true);
+                binding.btnPagarFinal.setText("Confirmar y Pagar");
+                mostrarError("Error de conexión: " + t.getMessage());
             }
         });
     }
 
-    // --- PASO 2: Volver de Mercado Pago ---
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_CODE_MERCADO_PAGO) {
-            binding.btnPagarFinal.setEnabled(true);
-            binding.btnPagarFinal.setText("Confirmar y Pagar");
-
-            if (resultCode == MercadoPagoCheckout.PAYMENT_RESULT_CODE) {
-                Payment payment = (Payment) data.getSerializableExtra(MercadoPagoCheckout.EXTRA_PAYMENT_RESULT);
-
-                if (payment != null && "approved".equals(payment.getPaymentStatus())) {
-                    // ¡ÉXITO! -> Guardamos compra con ID de Mercado Pago
-                    String idExterno = String.valueOf(payment.getId());
-                    String estado = payment.getPaymentStatus();
-
-                    procesarCompraFinal(idExterno, estado, "MERCADO_PAGO");
-                } else {
-                    Toast.makeText(this, "El pago no fue aprobado", Toast.LENGTH_LONG).show();
-                }
-            } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "Pago cancelado", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    // --- PASO 3: Guardar en Base de Datos (Método unificado) ---
+    // --- Guardar Compra en BD (Backend) ---
     private void procesarCompraFinal(String idExterno, String detalleEstado, String metodoPago) {
         binding.btnPagarFinal.setEnabled(false);
         binding.btnPagarFinal.setText("Generando Ticket...");
@@ -274,13 +294,11 @@ public class ConfirmarCompraActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences(SP_NAME, MODE_PRIVATE);
         String token = prefs.getString("USER_TOKEN", "");
 
-        // Crear request con todos los datos
         RequestCompra request = new RequestCompra(
                 horarioId, asiento, piso, precio,
                 misNombres, misApellidos, miDni, miCelular, metodoPago
         );
 
-        // Si es pago online, agregamos los datos extra
         if (idExterno != null) {
             request.setIdTransaccionExterna(idExterno);
             request.setDetalleEstado(detalleEstado);
@@ -303,21 +321,19 @@ public class ConfirmarCompraActivity extends AppCompatActivity {
     }
 
     private void finalizarExito(ResponseCompra body) {
-        // 1. Guardar notificación local
+        // 1. Notificación Local
         String notifTitle = "Viaje Confirmado";
         String notifMessage = "Asiento " + asiento + " a " + rutaStr;
 
         AppDatabase db = AppDatabase.getDatabase(this);
         String userId = getSharedPreferences(SP_NAME, MODE_PRIVATE).getString("USER_DNI", null);
 
-        // Ejecutar en hilo secundario (Room lo requiere)
         new Thread(() -> {
             NotificacionEntity notif = new NotificacionEntity(
                     notifTitle, notifMessage, "COMPRA",
                     new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(new Date()),
                     userId
             );
-            // Usamos el ID Visual (de MP o interno) para referencia
             notif.referenciaId = body.getPasajeId();
             notif.origenReferencia = "TICKET";
             db.notificacionDao().insertar(notif);
@@ -326,9 +342,8 @@ public class ConfirmarCompraActivity extends AppCompatActivity {
         // 2. Notificación Push
         mostrarNotificacionSistema(body.getPasajeId(), notifTitle, notifMessage);
 
-        // 3. Ir a Pantalla Ticket
+        // 3. Abrir Ticket y cerrar esta pantalla
         Intent intent = new Intent(ConfirmarCompraActivity.this, TicketActivity.class);
-        // Pasamos el ID VISUAL (Ej: 12345678 de Mercado Pago) para mostrar en el QR/Texto
         intent.putExtra("TICKET_VISUAL_ID", body.getIdTicketVisual());
         intent.putExtra("PASAJE_ID", body.getPasajeId());
         intent.putExtra("RUTA", rutaStr);
@@ -340,13 +355,13 @@ public class ConfirmarCompraActivity extends AppCompatActivity {
         intent.putExtra("SERVICIO", servicioBus);
 
         startActivity(intent);
-        finish(); // Cerrar para que no pueda volver atrás a pagar de nuevo
+        finish();
     }
 
     private void mostrarError(String msg) {
         binding.btnPagarFinal.setEnabled(true);
         binding.btnPagarFinal.setText("Confirmar y Pagar");
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
     private void mostrarNotificacionSistema(int pasajeId, String titulo, String mensaje) {
